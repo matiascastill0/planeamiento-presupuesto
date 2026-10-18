@@ -1,0 +1,73 @@
+# Catálogo de controles (flags) · 63 reglas
+
+Cada plantilla pasa por estas reglas celda por celda. Severidad: **BLOQUEANTE** rechaza el archivo · **ERROR** la línea va a cuarentena · **ALERTA** entra y se revisa · **INFO** se corrige sola.
+
+| Código | Familia | Severidad | Nombre | Regla que lo dispara | Acción |
+|---|---|---|---|---|---|
+| F01 | Archivo | BLOQUEANTE | Falta la hoja Ppto27 | La hoja fue renombrada o borrada | Rechazar archivo y devolver al área |
+| F02 | Archivo | BLOQUEANTE | Falta la tabla Tabla1 | Convirtieron la tabla en rango o la renombraron | Rechazar archivo |
+| F03 | Archivo | BLOQUEANTE | Columnas insertadas, borradas o movidas | El encabezado no coincide en cantidad/orden con el estándar A..AO | Rechazar archivo |
+| F10 | Archivo | BLOQUEANTE | Archivo duplicado | Mismo contenido (hash) que otro archivo cargado | Cargar uno solo |
+| F16 | Archivo | BLOQUEANTE | Archivo ilegible | No se pudo abrir (dañado, con clave o no es un .xlsx real) | Pedir el archivo de nuevo |
+| F05 | Archivo | ERROR | Datos fuera de Tabla1 | Hay celdas con valores debajo o a la derecha de la tabla: no se consolidan | No se cargan; devolver para que las pasen dentro de la tabla |
+| F11 | Archivo | ERROR | País de las líneas distinto al de la carpeta | La plantilla de un país trae líneas de otro | Cuarentena de esas líneas |
+| L01 | Línea | ERROR | País vacío o fuera de lista | Columna A no está en la lista País | Cuarentena |
+| L02 | Línea | ERROR | Vehículo inválido para el país | Columna B no está en la lista del país | Cuarentena |
+| L03 | Línea | ERROR | CeCo vacío, sin número o "Varios" | Columna C debe ser "NNN - Nombre" | Cuarentena |
+| L05 | Línea | ERROR | Nivel 1 vacío o fuera de lista | Columna F no está en Nivel_1 | Cuarentena |
+| L06 | Línea | ERROR | Nivel 2 no corresponde al Nivel 1 | Columna G no está en la lista del Nivel 1 | Cuarentena |
+| L09 | Línea | ERROR | Moneda vacía o fuera de lista | Columna M no es PEN/COP/CLP/USD/MXN | Cuarentena |
+| L18 | Línea | ERROR | Proveedor "Varios" | Prohibido usar Varios como proveedor | Cuarentena; pedir el proveedor real |
+| M01 | Montos | ERROR | Ppto 2027 en positivo | En las columnas Ppto 2027 todo monto debe ser negativo | Cuarentena (o invertir signo con aprobación) |
+| M05 | Montos | ERROR | Fórmula con error o sin valor | #REF!, #VALUE!, #DIV/0! o fórmula que no se puede calcular | Cuarentena |
+| M06 | Montos | ERROR | Fecha en celda de monto | Excel convirtió "1-5" en fecha | Cuarentena |
+| M07 | Montos | ERROR | Fórmula con vínculo a otro libro | =[Libro2.xlsx]Hoja1!A1 | Cuarentena |
+| M09 | Montos | ERROR | Texto no numérico en monto | "pendiente", "n/a", "ver correo" | Cuarentena |
+| C01 | Cambio vs enviado | ALERTA | Línea nueva con montos en Real 2026 | El área escribió montos en Ene–Ago 26 de una línea que no existía. El ejercicio se enfoca en Ppto 2027: el Real se toma de la TD | Ignorar Real del archivo; si era presupuesto, moverlo a 2027 |
+| C02 | Cambio vs enviado | ALERTA | Real 2026 modificado | Los montos Ene–Ago 26 difieren de los enviados (editados o redondeados) | Ignorar Real del archivo; Real = TD |
+| C03 | Cambio vs enviado | ALERTA | Textos de una línea del Real modificados | Cambiaron vehículo, proveedor, glosa, etc. de una línea con Real | Registrar; vehículo distinto al contable se revisa |
+| C04 | Cambio vs enviado | ALERTA | Línea del Real eliminada | Una línea enviada con Real ya no está | Revisar si fue intencional |
+| F04 | Archivo | ALERTA | Encabezado con caracteres dañados | Mismo orden y cantidad, pero el texto del título cambió (p. ej. "¿" en vez de "País") | Mapear por posición y registrar |
+| F07 | Archivo | ALERTA | Tipo de cambio guardado como texto | Filas 3–5 (TC) son texto con espacio duro: cualquier fórmula que las use da #VALUE! | Corregir en la plantilla base; el TC se toma de tabla maestra |
+| F08 | Archivo | ALERTA | Hojas distintas al estándar | Agregaron/borraron hojas o la hoja Tablas quedó visible | Registrar; validar listas |
+| F13 | Archivo | ALERTA | Cabecera o tipo de cambio modificados | El área cambió celdas fuera de Tabla1 en filas 1–8 (leyenda, TC) | Ignorar: el TC se toma de tabla maestra |
+| F14 | Archivo | ALERTA | Plantilla no reconocida | La ruta/nombre no coincide con ninguna plantilla del maestro de plantillas | Asignarla a mano en alias_ppto27.xlsx (alias_plantilla) |
+| F17 | Archivo | ALERTA | Dos versiones en la misma subida | En una misma carga llegaron dos archivos distintos de la misma plantilla | Se usa el de fecha de modificación más reciente; confirmar con el área |
+| L04 | Línea | ALERTA | CeCo fuera de la lista del archivo | El CeCo no está en Ceco_Nombre (hoja Tablas) | Validar contra maestro de CeCos |
+| L07 | Línea | ALERTA | Proveedor de relleno | Proveedor tipo "NO ESTA", "POR DEFINIR", "XXX", "?" | Revisar con el área |
+| L10 | Línea | ALERTA | Moneda no habitual para el país | Moneda distinta a la local o USD | Revisar conversión |
+| L11 | Línea | ALERTA | Glosa vacía | Línea sin Glosa / Texto | Revisar con el área |
+| L13 | Línea | ALERTA | Línea duplicada | Mismos textos A..M que otra línea del archivo | Revisar doble conteo |
+| L14 | Línea | ALERTA | CeCo de otra agrupación | El CeCo pertenece a una agrupación distinta a la de la plantilla (p. ej. 502 MDK en Staff - Finanzas USA) | Se clasifica por su CeCo; devolver al área para corregir |
+| L16 | Línea | ALERTA | Cuenta contable sugerida por parecido | No coincide con el plan de cuentas; hay una cuenta muy parecida | Confirmar y agregar a alias_ppto27.xlsx (alias_cuenta) |
+| L17 | Línea | ALERTA | Cuenta contable no reconocida | No está en el plan de cuentas ni en alias | Revisar con el área; se reporta por su Nivel 1 / Nivel 2 |
+| L19 | Línea | ALERTA | Proveedor sugerido por parecido | No coincide con el maestro; hay un proveedor muy parecido | Confirmar y agregar a alias_ppto27.xlsx (alias_proveedor) |
+| M03 | Montos | ALERTA | Número guardado como texto | "1,500", "S/ 200", "(300)", "1.500,00" | Convertir y registrar |
+| M08 | Montos | ALERTA | Fórmula con referencias a celdas | =N4*1364: depende de otras celdas | Usar valor calculado y registrar |
+| M13 | Montos | ALERTA | Ppto anual cargado en un solo mes | Línea recurrente en 2026 con todo 2027 en un mes | Revisar mensualización |
+| M14 | Montos | ALERTA | Variación > ±50 % sin comentario | P27 vs Real anualizado fuera de rango y Comentario de Área vacío | Pedir sustento |
+| M15 | Montos | ALERTA | Posible error de escala o moneda | P27 ≈ ×1000 / ÷1000 del Real anualizado, o ≈ × tipo de cambio | Revisar unidades y moneda |
+| M16 | Montos | ALERTA | Columna calculada pisada | F26 / P27 / Var. escritos como valor en vez de fórmula | Recalcular en Databricks |
+| T01 | Texto | ALERTA | Caracteres dañados (no UTF-8) | Ã©, Ã±, �, ╠, "+�": tildes mal codificadas | Reparar codificación |
+| T03 | Texto | ALERTA | Caracteres invisibles o de control | Zero-width, BOM, \x00… | Eliminar |
+| F06 | Archivo | INFO | Fila de totales dentro de Tabla1 | Activaron "Fila de totales" (SUBTOTAL): duplicaría el monto si se lee como línea | Excluir la fila de totales |
+| F09 | Archivo | INFO | Nombre de archivo distinto al enviado | Cambió el nombre (tildes, sufijos, versión) | Identificar la plantilla por metadatos/tag, no por nombre |
+| F12 | Archivo | INFO | Nombre no UTF-8 dentro del zip | El zip guardó la ruta en cp437 (p. ej. "Tesorer+�a"); se corrigió al extraer | Extraer forzando UTF-8 |
+| F15 | Archivo | INFO | Versión reemplazada | Llegó una versión más nueva de la misma plantilla | Se usa la última; la anterior queda en el historial |
+| L08 | Línea | INFO | Proveedor nuevo (fuera de la lista) | Proveedor no está en la lista Proveedor del archivo | Homologar proveedor |
+| L12 | Línea | INFO | Línea vacía | Fila de la tabla sin textos ni montos | Ignorar |
+| L15 | Línea | INFO | Cuenta contable homologada | La cuenta estaba escrita distinto (tildes, mayúsculas, espacios) o figura en alias aprobados | Se reemplaza por el nombre oficial |
+| M02 | Montos | INFO | Celda de monto con espacio / espacio duro | Texto vacío (" " o "\xa0") en lugar de celda vacía | Tratar como vacío |
+| M04 | Montos | INFO | Fórmula aritmética simple | =-2000000/12 | Evaluar |
+| M10 | Montos | INFO | Real 2026 positivo | Extornos / reversiones del contable | Permitido en Real; no se presupuesta |
+| M11 | Montos | INFO | Cero escrito | Se escribió 0 en vez de dejar vacío | Tratar como vacío |
+| M12 | Montos | INFO | Ppto 2027 con más de 2 decimales | Montos con decimales largos | Redondear a 2 |
+| M17 | Montos | INFO | Forecast Set–Dic 26 ingresado | El área llenó Set–Dic 26 | Cargar como F26 del área |
+| T02 | Texto | INFO | Espacios extra, espacio duro o saltos de línea | Textos con espacios al inicio/fin, dobles o \xa0 | Limpiar (trim) |
+| T04 | Texto | INFO | Texto de más de 255 caracteres | Glosa o comentario muy largo | Truncar en reportes |
+| T05 | Texto | INFO | Separadores que rompen CSV | Textos con ; \| o tabulación | Escapar al exportar |
+| T06 | Texto | INFO | Tildes o mayúsculas distintas al catálogo | "Peru" en vez de "Perú" | Normalizar |
+
+---
+
+<sub>© 2026 Credicorp Capital. Uso interno. Ver [LICENSE](../LICENSE).</sub>

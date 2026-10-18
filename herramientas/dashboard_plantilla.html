@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ppto27 Validación y Proyecto</title>
+<style>
+:root{
+  --coral:#E86953; --coral-2:#F4A78F; --coral-3:#FBE3DF; --ink:#2F3437; --ink-2:#4A5458; --gris:#8C9D9D; --gris-2:#C9D1D1; --gris-3:#E3E7E7;
+  --ok:#5B9A68; --ok-bg:#E5F1E8; --warn:#C98A12; --warn-bg:#FCF1DA; --bad:#C0392B; --bad-bg:#F8E1DE;
+  --bg:#F5F6F6; --card:#FFFFFF; --texto:#2F3437; --suave:#6E7B7B; --borde:#E3E7E7; --dir:#2F3437; --ind:#E86953;
+  --sombra:0 1px 2px rgba(47,52,55,.06),0 2px 8px rgba(47,52,55,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1E20; --card:#24282B; --texto:#E8ECEC; --suave:#A3B0B0; --borde:#363C40; --dir:#C9D1D1; --ind:#E86953;
+    --ok-bg:#1F3326; --warn-bg:#3A2F14; --bad-bg:#3D1F1B; --coral-3:#3D2622; --gris-3:#363C40; --ink:#E8ECEC; --ink-2:#C9D1D1;
+    --sombra:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1E20; --card:#24282B; --texto:#E8ECEC; --suave:#A3B0B0; --borde:#363C40; --dir:#C9D1D1; --ind:#E86953;
+  --ok-bg:#1F3326; --warn-bg:#3A2F14; --bad-bg:#3D1F1B; --coral-3:#3D2622; --gris-3:#363C40; --ink:#E8ECEC; --ink-2:#C9D1D1;
+  --sombra:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden;margin:0;background:var(--bg);color:var(--texto);font:14px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--coral)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+header.top{background:var(--card);border-bottom:3px solid var(--coral)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding-top:14px;padding-bottom:10px}
+.marca{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 320px}
+.logo{width:34px;height:34px;border-radius:8px;background:var(--coral);display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
+.marca h1{font-size:18px;margin:0;line-height:1.2}
+.marca small{display:block;color:var(--suave);font-size:12px}
+.acciones{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+button,.btn{font:inherit;border:1px solid var(--borde);background:var(--card);color:var(--texto);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--coral)}
+button.prim{background:var(--coral);border-color:var(--coral);color:#fff}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;padding-top:4px;scrollbar-width:thin;flex:1 1 100%;min-width:0;max-width:100%}
+nav.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:10px 14px;white-space:nowrap;color:var(--suave);font-weight:600}
+nav.tabs button[aria-selected="true"]{color:var(--texto);border-bottom-color:var(--coral)}
+.aviso{background:var(--warn-bg);border:1px solid #E9C97A;color:var(--texto);border-radius:10px;padding:10px 14px;margin:16px 0 0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:flex-start}
+.aviso b{white-space:nowrap}
+main{padding:16px 0 40px}
+section.panel{display:none}
+section.panel.activo{display:block}
+h2{font-size:17px;margin:22px 0 10px}
+h3{font-size:14px;margin:0 0 8px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:980px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}}
+@media (max-width:520px){.g4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--borde);border-radius:12px;padding:14px 16px;box-shadow:var(--sombra);min-width:0}
+.kpi .lbl{color:var(--suave);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.kpi .val{font-size:24px;font-weight:700;line-height:1.25;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .sub{color:var(--suave);font-size:12px}
+.veredicto{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sello{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:700;flex:none;color:#fff}
+.sello.ok{background:var(--ok)} .sello.falla{background:var(--bad)} .sello.rev{background:var(--warn)}
+.veredicto h2{margin:0;font-size:20px}
+.veredicto p{margin:2px 0 0;color:var(--suave)}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.OK{background:var(--ok-bg);color:var(--ok)} .pill.FALLA{background:var(--bad-bg);color:var(--bad)} .pill.REVISAR{background:var(--warn-bg);color:var(--warn)}
+.pill.BLOQUEANTE{background:var(--bad);color:#fff} .pill.ERROR{background:var(--bad-bg);color:var(--bad)} .pill.ALERTA{background:var(--warn-bg);color:var(--warn)} .pill.INFO{background:var(--gris-3);color:var(--suave)}
+.pill.Crítico{background:var(--coral-3);color:var(--coral)} .pill.Dato,.pill.Revisar{background:var(--gris-3);color:var(--suave)}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--borde);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--borde);text-align:left;vertical-align:top}
+th{background:var(--gris-3);font-weight:600;position:sticky;top:0;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:700;background:var(--coral-3)}
+tr.n1 td{font-weight:700}
+td.cero{color:var(--ok);font-weight:700}
+td.mal{color:var(--bad);font-weight:700}
+.muted{color:var(--suave)}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--suave);margin:4px 0 8px}
+.leyenda i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+svg text{fill:var(--texto);font-family:inherit}
+svg .eje{stroke:var(--borde)}
+.chk{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:start}
+.chk .cod{font-weight:700;font-size:13px;background:var(--gris-3);border-radius:6px;padding:2px 8px;text-align:center}
+details{border:1px solid var(--borde);border-radius:10px;background:var(--card);margin:8px 0}
+details summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸";color:var(--coral)}
+details[open] summary::before{content:"▾"}
+details .cuerpo{padding:0 14px 12px}
+.flujo{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.paso{flex:1 1 150px;background:var(--card);border:1px solid var(--borde);border-top:4px solid var(--coral);border-radius:10px;padding:10px 12px;position:relative;min-width:0}
+.paso.dato{border-top-color:var(--gris)} .paso.bi{border-top-color:var(--ok)}
+.paso b{display:block;font-size:13px}
+.paso span{font-size:12px;color:var(--suave)}
+.paso .num{position:absolute;top:8px;right:10px;font-size:11px;color:var(--suave)}
+.flecha{align-self:center;color:var(--coral);font-weight:700}
+@media (max-width:760px){.flecha{display:none}}
+ul.lim{margin:6px 0;padding-left:18px} ul.lim li{margin:3px 0}
+code{background:var(--gris-3);border-radius:4px;padding:1px 5px;font-size:12px;font-family:Consolas,"SF Mono",Menlo,monospace}
+textarea{width:100%;min-height:260px;font:12px/1.45 Consolas,"SF Mono",Menlo,monospace;background:var(--card);color:var(--texto);border:1px solid var(--borde);border-radius:10px;padding:10px}
+.estado-msg{margin-top:8px;font-weight:600}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+input[type=search],select{font:inherit;border:1px solid var(--borde);background:var(--card);color:var(--texto);border-radius:8px;padding:6px 10px;min-width:0}
+.chip{border-radius:999px;padding:3px 12px;font-size:12px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.barra{height:8px;border-radius:4px;background:var(--gris-3);overflow:hidden}
+.barra>i{display:block;height:100%;background:var(--coral)}
+.fp{columns:2;column-gap:24px}
+@media (max-width:760px){.fp{columns:1}}
+.fp .bloque{break-inside:avoid;margin-bottom:12px}
+.fp .bloque h4{margin:0 0 4px;font-size:13px;color:var(--coral)}
+.fp .bloque div{font-size:13px;padding:1px 0}
+.fp .grupo{color:var(--suave);font-size:12px;margin-top:4px}
+footer{color:var(--suave);font-size:12px;padding:20px 0 30px;border-top:1px solid var(--borde)}
+@media print{
+  header.top .acciones, nav.tabs, #panel-actualizar{display:none!important}
+  section.panel{display:block!important;break-before:page}
+  section.panel:first-of-type{break-before:auto}
+  body{background:#fff}
+  .card,.tabla-wrap{box-shadow:none}
+  details{break-inside:avoid} details .cuerpo{display:block}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="marca">
+      <div class="logo" aria-hidden="true">CC</div>
+      <div><h1>Ppto27 · Validación y proyecto</h1><small id="sub-fecha">Credicorp Capital · Planeamiento Financiero</small></div>
+    </div>
+    <div class="acciones">
+      <button id="btn-tema" type="button" title="Cambiar tema claro / oscuro">◐ Tema</button>
+      <button type="button" onclick="window.print()" title="Imprimir o guardar como PDF">⎙ Imprimir / PDF</button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button role="tab" data-tab="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" data-tab="controles">Controles</button>
+      <button role="tab" data-tab="cruce">Contable vs Dir/Ind</button>
+      <button role="tab" data-tab="udn">UdN</button>
+      <button role="tab" data-tab="calidad">Calidad y pendientes</button>
+      <button role="tab" data-tab="proyecto">El proyecto</button>
+      <button role="tab" data-tab="reglas">Reglas y flags</button>
+      <button role="tab" data-tab="operar">Cómo operar</button>
+      <button role="tab" data-tab="actualizar">Actualizar datos</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="aviso" id="aviso-supuestos"><b>⚠ Datos de prueba.</b><span>Las plantillas cargadas son <b>supuestos</b>, no las devoluciones oficiales de las áreas. Los montos y flags sirven para validar el proceso, no son hallazgos reales.</span></div>
+</div>
+
+<main class="wrap">
+
+<!-- ═════════════ RESUMEN ═════════════ -->
+<section class="panel activo" id="panel-resumen">
+  <div class="card veredicto" id="veredicto"></div>
+  <div class="grid g4" style="margin-top:14px" id="kpis"></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Gasto por país: Directo vs Indirecto (PEN, millones)</h3>
+      <div class="leyenda"><span><i style="background:var(--dir)"></i>Directo</span><span><i style="background:var(--ind)"></i>Indirecto asignado</span></div>
+      <div id="graf-pais"></div></div>
+    <div class="card"><h3>Controles</h3><div id="mini-controles"></div></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Líneas por estado</h3><div id="graf-estado"></div></div>
+    <div class="card"><h3>Gasto por Nivel 1 · Formato Perú (PEN, millones)</h3><div id="graf-n1"></div></div>
+  </div>
+</section>
+
+<!-- ═════════════ CONTROLES ═════════════ -->
+<section class="panel" id="panel-controles">
+  <h2>Controles del validador (notebook 95_validar)</h2>
+  <p class="muted">El reparto Dir/Ind se <b>recalcula por separado</b>, solo con el contable, la tabla de drivers y las plantillas, y se compara con la tabla que usa el BI. No usa el código que lo generó: por eso es una prueba independiente. <b>Crítico</b> = si falla, el dato no es confiable. <b>Dato / Revisar</b> = punto de negocio para confirmar, no es error del proceso.</p>
+  <div id="lista-controles"></div>
+</section>
+
+<!-- ═════════════ CRUCE ═════════════ -->
+<section class="panel" id="panel-cruce">
+  <h2>Contable = Gestión Dir/Ind</h2>
+  <p class="muted">Cada sol del contable (líneas OK y OK con alerta) debe aparecer una sola vez en el Dir/Ind, como Directo o como Indirecto asignado. La columna <b>Diferencia</b> tiene que ser 0,00 en todas las filas.</p>
+  <div class="tabla-wrap"><table id="t-pais"></table></div>
+  <h2>País × Nivel 1 (orden Formato Perú)</h2>
+  <div class="filtros"><label for="f-pais-n1" class="muted">País</label><select id="f-pais-n1"></select></div>
+  <div class="tabla-wrap"><table id="t-n1"></table></div>
+  <h2>Cómo cruzarlo con el Power BI</h2>
+  <div class="card"><ol class="lim" id="cruce-bi"></ol>
+  <p class="muted" style="margin:6px 0 0">Si aquí cuadra y en el BI no, los datos están bien y el problema es una medida DAX o un filtro de página.</p></div>
+</section>
+
+<!-- ═════════════ UDN ═════════════ -->
+<section class="panel" id="panel-udn">
+  <h2>Gestión por UdN</h2>
+  <div class="filtros"><label for="f-pais-udn" class="muted">País</label><select id="f-pais-udn"></select></div>
+  <div class="grid g2">
+    <div class="card"><h3>Directo + Indirecto por UdN (PEN, millones)</h3>
+      <div class="leyenda"><span><i style="background:var(--dir)"></i>Directo</span><span><i style="background:var(--ind)"></i>Indirecto asignado</span></div>
+      <div id="graf-udn"></div></div>
+    <div class="card"><h3>% indirecto por país</h3><p class="muted" style="margin-top:0">Peso de la bolsa de indirectos sobre el gasto total del país.</p><div id="pct-ind"></div></div>
+  </div>
+  <h2>Detalle UdN × país</h2>
+  <div class="tabla-wrap"><table id="t-udn"></table></div>
+</section>
+
+<!-- ═════════════ CALIDAD ═════════════ -->
+<section class="panel" id="panel-calidad">
+  <h2>Plantillas y tablas</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Entrega de plantillas</h3><div id="plantillas"></div></div>
+    <div class="card"><h3>Filas por tabla gold</h3><div class="tabla-wrap" style="border:0"><table id="t-filas"></table></div></div>
+  </div>
+  <h2>CeCos sin driver (repartidos por regla)</h2>
+  <p class="muted">No tienen fila en la tabla de drivers v2. Se repartieron con la regla: CeCo de negocio en plantilla de UdN → imputación directa a su UdN; si no → bolsa de indirectos. <b>Confirmar con Planeamiento</b> si deben agregarse a la tabla de drivers.</p>
+  <div class="tabla-wrap"><table id="t-sindriver"></table></div>
+  <h2>Líneas sin mapeo al Formato Perú</h2>
+  <div class="card" id="sinmapeo"></div>
+  <h2>Diferencias del recálculo</h2>
+  <div class="card" id="difs"></div>
+  <h2>Pendientes de negocio</h2>
+  <div class="card"><ul class="lim" id="pendientes"></ul></div>
+</section>
+
+<!-- ═════════════ PROYECTO ═════════════ -->
+<section class="panel" id="panel-proyecto">
+  <h2>Qué es</h2>
+  <div class="card">
+    <p style="margin-top:0">Consolida en <b>Databricks</b> (Azure, Unity Catalog <code>catalogo_ppto.esquema_ppto</code>) las plantillas de <b>Presupuesto 2027</b> que devuelven las UdN, Staff y rubros, y las deja listas para <b>Power BI</b> en tres vistas:</p>
+    <div class="grid g3">
+      <div><b>1 · Contable</b><br><span class="muted">Formato Perú, Nivel 1 / Nivel 2, por país, CeCo, vehículo, cuenta y proveedor.</span> <span class="pill OK">listo</span></div>
+      <div><b>2 · Gestión Dir/Ind</b><br><span class="muted">Gasto por UdN: directo (imputación y soporte) e indirecto repartido con los drivers v2.</span> <span class="pill OK">listo</span></div>
+      <div><b>3 · Gestión + intercompanies</b><br><span class="muted">Vista de gestión con los cargos entre compañías.</span> <span class="pill REVISAR">siguiente</span></div>
+    </div>
+  </div>
+  <h2>Flujo de punta a punta</h2>
+  <div class="flujo">
+    <div class="paso dato"><span class="num">0</span><b>SharePoint</b><span>Plantillas Ppto27 por rubro y país (Personal, Administrativos, TI, D&amp;A, Impuestos)</span></div><div class="flecha">→</div>
+    <div class="paso dato"><span class="num">1</span><b>Volume · 10_cargas</b><span>Una carpeta por carga <code>AAAAMMDD_HHMM</code>; la versión enviada como <code>REF_</code></span></div><div class="flecha">→</div>
+    <div class="paso"><span class="num">2</span><b>Bronze</b><span>Lee los Excel en paralelo, tal cual (texto). Hash: lo repetido no se relee</span></div><div class="flecha">→</div>
+    <div class="paso"><span class="num">3</span><b>Silver</b><span>Versión vigente, montos, homologación de cuentas/proveedores/CeCos, flags y estado por línea</span></div><div class="flecha">→</div>
+    <div class="paso"><span class="num">4</span><b>Gold</b><span>Modelo estrella: tipo de cambio, Formato Perú y reparto Dir/Ind</span></div><div class="flecha">→</div>
+    <div class="paso"><span class="num">5</span><b>Control + Validar</b><span>90_control (cuadre 100 = 100) y 95_validar (recálculo independiente)</span></div><div class="flecha">→</div>
+    <div class="paso bi"><span class="num">6</span><b>Power BI</b><span>Conector Azure Databricks, modo Importar, cuenta corporativa</span></div>
+  </div>
+  <h2>Capas y tablas</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Bronze · <code>ppto27_brz_*</code></h3><ul class="lim"><li><code>brz_archivos</code>: cada archivo recibido, con hash e identificación (historial de versiones)</li><li><code>brz_lineas</code>: filas de Tabla1 sin interpretar</li><li><code>ctl_cargas</code>: una fila por carga</li></ul></div>
+    <div class="card"><h3>Silver · <code>ppto27_slv_*</code></h3><ul class="lim"><li><code>slv_archivos</code>: versión vigente de cada plantilla y su estado</li><li><code>slv_lineas</code>: líneas limpias y homologadas, con estado</li><li><code>slv_flags</code>: cada flag de archivo, línea o celda</li></ul></div>
+    <div class="card"><h3>Gold · <code>ppto27_gld_*</code> (lo que lee el BI)</h3><ul class="lim"><li><code>fact_ppto</code>: contable, línea × mes</li><li><code>fact_gestion_dirind</code>: línea × UdN × componente × mes</li><li><code>fact_flags</code> + 12 dimensiones (fecha, Formato Perú, país, CeCo, UdN, componente, vehículo, cuenta, proveedor, plantilla, flag, driver)</li></ul></div>
+  </div>
+  <h2>Por qué así</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="lim">
+      <li><b>PySpark en paralelo:</b> cada worker abre sus Excel. El tiempo crece por archivos ÷ núcleos, no en serie.</li>
+      <li><b>Idempotente:</b> subir dos veces el mismo archivo no duplica nada (mismo hash).</li>
+      <li><b>Última versión gana:</b> una carga puede traer todo o solo lo que cambió.</li>
+      <li><b>Homologación por diccionario:</b> cada texto distinto se limpia una sola vez y se cruza por broadcast.</li>
+    </ul></div>
+    <div class="card"><ul class="lim">
+      <li><b>Nada se pierde en silencio:</b> lo dudoso queda en cuarentena con su flag, no se borra.</li>
+      <li><b>Cuadre 100 = 100:</b> el total de cada plantilla = lo que llega a <code>fact_ppto</code>.</li>
+      <li><b>Validación independiente:</b> el reparto se recalcula con otro código y se compara.</li>
+      <li><b>Mantenible:</b> reglas en librerías <code>ppto27_*.py</code>; maestros y drivers en Excel editables.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ═════════════ REGLAS ═════════════ -->
+<section class="panel" id="panel-reglas">
+  <h2>Reglas del reparto Dir/Ind (drivers v2)</h2>
+  <div class="card chk">
+    <span class="cod">1</span><div><b>Qué líneas entran:</b> estado OK u OK con alerta, de un país con moneda local (Perú, Colombia, Chile, Panamá, USA, México) y con monto ≠ 0.</div>
+    <span class="cod">2</span><div><b>Qué drivers se usan:</b> solo las filas con <i>Cuenta en control 100 % = Sí</i>, sin INTERCOM, normalizadas para que cada país × CeCo × vehículo sume 100 %.</div>
+    <span class="cod">3</span><div><b>Cómo se busca el driver:</b> primero por país × CeCo × <b>vehículo exacto</b>; si no hay, el de vehículo <b>"(todos)"</b>.</div>
+    <span class="cod">4</span><div><b>Componentes:</b> <span class="pill Dato">Imputación directa</span> y <span class="pill Dato">Soporte directo</span> = <b>Directo</b> (van a la UdN del driver). <span class="pill Crítico">Indirecto</span> = va a la <b>bolsa</b> del país.</div>
+    <span class="cod">5</span><div><b>Sin driver (regla):</b> CeCo de negocio (3 dígitos que empiezan con 2, 5, 6, 8 o 9, o Tyba 113/346/810/811/818) en plantilla de UdN → imputación directa a esa UdN. El resto → bolsa de indirectos.</div>
+    <span class="cod">6</span><div><b>Reparto de la bolsa:</b> por país y mes, en la misma proporción que la <b>imputación directa</b> de cada UdN. Si un país no tiene imputación directa, queda como "Sin base de reparto".</div>
+    <span class="cod">7</span><div><b>Monedas:</b> moneda origen → USD → PEN y moneda local con el tipo de cambio del maestro (México se reporta en PEN). El gasto va en negativo.</div>
+  </div>
+  <h2>Estados de línea</h2>
+  <div class="grid g4">
+    <div class="card"><span class="pill OK">OK</span><p class="muted">Sin observaciones. Entra al BI.</p></div>
+    <div class="card"><span class="pill REVISAR">OK con alerta</span><p class="muted">Entra al BI; tiene algo para confirmar (ej. proveedor sugerido).</p></div>
+    <div class="card"><span class="pill FALLA">Cuarentena</span><p class="muted">No entra al BI hasta corregirse (ej. monto positivo, CeCo inválido, "Varios").</p></div>
+    <div class="card"><span class="pill BLOQUEANTE">Rechazada</span><p class="muted">El archivo no se pudo usar (sin hoja Ppto27, columnas movidas, ilegible).</p></div>
+  </div>
+  <h2>Formato Perú (orden del reporte contable)</h2>
+  <div class="card fp" id="fp"></div>
+  <h2>Catálogo de flags</h2>
+  <div class="filtros">
+    <input type="search" id="f-flag" placeholder="Buscar código o texto…" aria-label="Buscar flag">
+    <span id="chips-sev"></span>
+  </div>
+  <div class="tabla-wrap"><table id="t-flags"></table></div>
+</section>
+
+<!-- ═════════════ OPERAR ═════════════ -->
+<section class="panel" id="panel-operar">
+  <h2>Operación en Databricks</h2>
+  <div class="tabla-wrap"><table>
+    <thead><tr><th>Notebook</th><th>Cuándo</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><code>00_setup</code></td><td>Una vez</td><td>Crea las carpetas del Volume y las tablas de control.</td></tr>
+      <tr><td><code>99_ejecutar_todo</code></td><td>Cada carga</td><td>Bronze → silver → gold → control de corrido (elegir la carga en el desplegable).</td></tr>
+      <tr><td><code>10_bronze</code> · <code>20_silver</code> · <code>30_gold</code></td><td>Si se quiere paso a paso</td><td>Las mismas etapas por separado, con su resumen.</td></tr>
+      <tr><td><code>90_control</code></td><td>Después de gold</td><td>Cuadre 100 = 100 por plantilla, integridad de claves, mapeo al Formato Perú y contable = Dir/Ind.</td></tr>
+      <tr><td><code>95_validar</code></td><td>Después de cada carga</td><td>Recálculo independiente del reparto, cruce para el BI, CeCos sin driver, trazabilidad; última celda: reporte en texto para este dashboard.</td></tr>
+    </tbody></table></div>
+  <h2>Paso a paso de una carga</h2>
+  <div class="card"><ol class="lim">
+    <li>Descargar de SharePoint la carpeta del rubro (completa o solo lo que cambió).</li>
+    <li>Subirla a <code>ppto27/10_cargas/AAAAMMDD_HHMM/</code> manteniendo las carpetas tal cual. La versión enviada a las áreas se sube una sola vez como <code>REF_AAAAMMDD</code>.</li>
+    <li>Correr <code>99_ejecutar_todo</code> (elegir la carga). Debe terminar con "todos los controles OK".</li>
+    <li>Correr <code>95_validar</code> → Run all. Los 4 controles críticos deben salir OK.</li>
+    <li>Copiar el texto de la última celda (sección H) y pegarlo en <b>Actualizar datos</b> de este dashboard.</li>
+    <li>Power BI → <b>Actualizar</b>. Cruzar 2 o 3 números con la pestaña <b>Contable vs Dir/Ind</b>.</li>
+  </ol></div>
+  <h2>Si algo falla</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="lim">
+      <li><b>Un control crítico en FALLA:</b> no publicar el BI. La sección E de <code>95_validar</code> muestra la línea, UdN y mes exactos.</li>
+      <li><b>Plantilla no reconocida (F14):</b> agregarla en <code>alias_ppto27.xlsx</code> → hoja <code>alias_plantilla</code> y volver a correr; no hace falta subirla de nuevo.</li>
+      <li><b>Proveedor o cuenta nuevos:</b> <code>alias_proveedor</code> / <code>alias_cuenta</code> en el mismo Excel.</li>
+    </ul></div>
+    <div class="card"><ul class="lim">
+      <li><b>CeCo sin driver:</b> confirmar con Planeamiento y agregarlo a <code>drivers_ppto27.xlsx</code> (sin cambiar su estructura).</li>
+      <li><b>El BI no cuadra pero el validador sí:</b> revisar la medida DAX o los filtros de la página.</li>
+      <li><b>Error de código:</b> captura completa (notebook + celda + mensaje).</li>
+    </ul></div>
+  </div>
+  <h2>Glosario</h2>
+  <div class="card"><div class="grid g2">
+    <div><b>Imputación directa:</b> gasto que la UdN genera por sí misma (su propio CeCo).</div>
+    <div><b>Soporte directo:</b> gasto de un área de soporte asignado a una UdN con driver propio.</div>
+    <div><b>Bolsa de indirectos:</b> gasto Staff / corporativo que se reparte entre las UdN del país.</div>
+    <div><b>Driver:</b> % con que un CeCo × vehículo se distribuye entre UdN y componentes.</div>
+    <div><b>Formato Perú:</b> estructura Nivel 1 / Nivel 2 del P&amp;G de gestión.</div>
+    <div><b>Cuarentena:</b> línea retenida fuera del BI hasta que el área la corrija.</div>
+    <div><b>REF:</b> versión de las plantillas enviada a las áreas; referencia para los flags de cambio (C).</div>
+    <div><b>Gold:</b> tablas finales del modelo que lee el Power BI.</div>
+  </div></div>
+</section>
+
+<!-- ═════════════ ACTUALIZAR ═════════════ -->
+<section class="panel" id="panel-actualizar">
+  <h2>Actualizar con un nuevo reporte</h2>
+  <div class="card">
+    <ol class="lim" style="margin-top:0">
+      <li>En Databricks corre <code>95_validar</code> → Run all.</li>
+      <li>Copia todo el texto que imprime la última celda (empieza con <code>PPTO27 VALIDACION</code> y termina con <code>VEREDICTO</code>).</li>
+      <li>Pégalo aquí abajo y presiona <b>Procesar</b>. Todas las pestañas se recalculan. Se recuerda en este navegador.</li>
+    </ol>
+    <textarea id="txt-reporte" spellcheck="false" aria-label="Reporte del validador"></textarea>
+    <div class="filtros" style="margin-top:10px">
+      <button class="prim" id="btn-procesar" type="button">Procesar</button>
+      <button id="btn-ejemplo" type="button">Volver al reporte incluido</button>
+    </div>
+    <div class="estado-msg" id="msg-reporte" role="status"></div>
+  </div>
+</section>
+
+</main>
+<footer class="wrap" id="pie"></footer>
+
+<script>
+"use strict";
+var REPORTE_BASE = __REPORTE__;
+var CATALOGO = __CATALOGO__;
+var ESTRUCTURA = __ESTRUCTURA__;
+var GENERADO = __GENERADO__;
+
+var N1_ORDEN = ["Gastos del Personal", "Gastos Administrativos", "Gastos de TI", "Otros Gastos", "Sin mapeo"];
+var PAIS_ORDEN = ["Perú", "Colombia", "Chile", "Panamá", "USA", "México"];
+var CONTROLES_INFO = {
+  A1: {t: "Mapeo al Formato Perú", q: "Toda línea con monto tiene Nivel 1 / Nivel 2 del Formato Perú.", p: "Si no, la línea no aparece en la matriz contable del BI.", f: "Revisar el Nivel 1 / Nivel 2 que escribió el área en la plantilla."},
+  A2: {t: "Signo del gasto", q: "Ninguna línea OK tiene monto positivo (el gasto va en negativo).", p: "Un positivo resta gasto y distorsiona el total.", f: "Pedir al área que corrija el signo; mientras tanto queda en cuarentena."},
+  A3: {t: "Tipo de cambio", q: "Toda fila con monto en moneda origen tiene su monto en PEN y en moneda local.", p: "Sin TC, la fila suma 0 en el BI.", f: "Completar el tipo de cambio en el maestro (hoja tipo_cambio)."},
+  B1: {t: "Conservación", q: "Cada línea contable × mes se reparte al 100 %: ni se pierde ni se duplica plata.", p: "Es la prueba de que contable = Dir/Ind línea por línea, no solo en totales.", f: "La sección E de 95_validar lista la línea y el mes con diferencia."},
+  B2: {t: "Drivers al 100 %", q: "En la tabla de drivers cada país × CeCo × vehículo suma 100 %.", p: "Un driver que no suma 100 % crea o pierde gasto.", f: "Corregir los % en drivers_ppto27.xlsx."},
+  B3: {t: "Recálculo línea por línea", q: "Línea × mes × UdN × componente = monto × % del driver (o la regla si no tiene).", p: "Confirma que cada sol fue a la UdN y componente correctos.", f: "La sección E muestra la combinación exacta que no coincide."},
+  B4: {t: "Reparto de indirectos", q: "La bolsa de cada país × mes se reparte según la participación de la imputación directa de cada UdN.", p: "Confirma la regla de asignación de indirectos.", f: "Revisar la hoja Indirectos por UdN del Excel de validación."},
+  B5: {t: "Sin base de reparto", q: "Indirectos que no se pudieron repartir porque el país no tiene imputación directa.", p: "Ese monto no llega a ninguna UdN.", f: "Definir con Planeamiento la base de reparto de ese país."},
+  B6: {t: "Fuera del Dir/Ind", q: "Líneas contables OK de un país no reconocido (sin moneda local).", p: "Esas líneas están en el contable pero no en gestión.", f: "Revisar el país escrito en la plantilla."},
+  B7: {t: "CeCos sin driver", q: "CeCo × vehículo sin fila en la tabla de drivers; se repartieron por regla.", p: "La regla es razonable, pero la decisión es de negocio.", f: "Confirmar con Planeamiento y, si corresponde, agregarlos a la tabla de drivers."}
+};
+
+/* ───────────── utilidades ───────────── */
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]; }); }
+function num(s) { return parseFloat(String(s).replace(/,/g, "")); }
+var fmt2 = new Intl.NumberFormat("es-PE", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+var fmt0 = new Intl.NumberFormat("es-PE", {maximumFractionDigits: 0});
+var fmt1 = new Intl.NumberFormat("es-PE", {minimumFractionDigits: 1, maximumFractionDigits: 1});
+function m2(x) { return fmt2.format(x); }
+function mill(x) { return fmt1.format(x / 1e6); }
+function ent(x) { return fmt0.format(x); }
+function pct(a, b) { return b ? Math.abs(100 * a / b) : 0; }
+function ordenPais(a, b) { var i = PAIS_ORDEN.indexOf(a), j = PAIS_ORDEN.indexOf(b); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j) || a.localeCompare(b); }
+function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+/* ───────────── parser del reporte (acepta el texto con o sin saltos de línea) ───────────── */
+var NUM = "(-?[\\d,]+(?:\\.\\d+)?)";
+function todos(re, s) { var r = [], m; re.lastIndex = 0; while ((m = re.exec(s)) !== null) { r.push(m); if (m[0] === "") re.lastIndex++; } return r; }
+function parsear(texto) {
+  var t = String(texto || "").replace(/\s+/g, " ").trim();
+  if (!/VALIDACION/i.test(t) || t.indexOf("== CONTROLES ==") < 0) throw new Error("No parece el reporte de 95_validar (falta el encabezado o la sección CONTROLES).");
+  var partes = t.split(/== ([^=]+?) ==/), sec = {};
+  for (var i = 1; i < partes.length; i += 2) sec[partes[i].trim()] = (partes[i + 1] || "").trim();
+  function S(prefijo) { for (var k in sec) if (k.indexOf(prefijo) === 0) return sec[k]; return ""; }
+  var D = {};
+  var f = /VALIDACION \| (\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2})/.exec(t);
+  D.fecha = f ? f[1] : "";
+  var v = /VEREDICTO \| (\w+)/.exec(t);
+  D.veredicto = v ? v[1] : "";
+  D.filas = todos(/([a-z_]+) \| (\d+)/g, S("FILAS")).filter(function (m) { return /^(fact|dim)_/.test(m[1]); }).map(function (m) { return {tabla: m[1], filas: +m[2]}; });
+  D.plantillas = todos(/plantillas \| ([^|]+?) \| (\d+)/g, S("FILAS")).map(function (m) { return {entrega: m[1].trim(), n: +m[2]}; });
+  D.controles = todos(/(OK|REVISAR|FALLA) \| ([A-Z]\d+) \| (\d+) \| (\d+) \| (.*?)(?= (?:OK|REVISAR|FALLA) \| [A-Z]\d+ \||$)/g, S("CONTROLES"))
+    .map(function (m) { return {resultado: m[1], cod: m[2], casos: +m[3], dif: +m[4], detalle: m[5].trim()}; });
+  D.estados = todos(new RegExp("(OK con alerta|Cuarentena|Rechazada|OK) \\| (\\d+) \\| " + NUM, "g"), S("ESTADO"))
+    .map(function (m) { return {estado: m[1], lineas: +m[2], pen: num(m[3])}; });
+  var paises = todos(new RegExp("([^|\\d\\s-][^|]*?) \\| " + NUM + " \\| " + NUM + " \\| " + NUM + " \\| " + NUM, "g"), S("PAIS:"))
+    .map(function (m) { return {pais: m[1].trim(), cont: num(m[2]), dir: num(m[3]), ind: num(m[4]), dif: num(m[5])}; });
+  D.total = paises.filter(function (p) { return p.pais === "TOTAL"; })[0] || null;
+  D.paises = paises.filter(function (p) { return p.pais !== "TOTAL"; }).sort(function (a, b) { return ordenPais(a.pais, b.pais); });
+  D.n1 = todos(new RegExp("([^|\\d\\s-][^|]*?) \\| ([^|]+?) \\| " + NUM + " \\| " + NUM + " \\| " + NUM, "g"), S("PAIS x N1"))
+    .map(function (m) { return {pais: m[1].trim(), n1: m[2].trim(), cont: num(m[3]), dirind: num(m[4]), dif: num(m[5])}; });
+  D.udn = todos(new RegExp("([^|\\d\\s-][^|]*?) \\| ([^|]+?) \\| " + NUM + " \\| " + NUM + "(?= |$)", "g"), S("UDN x PAIS"))
+    .map(function (m) { return {pais: m[1].trim(), udn: m[2].trim(), dir: num(m[3]), ind: num(m[4])}; });
+  D.sindriver = todos(new RegExp("([^|\\d\\s-][^|]*?) \\| (\\d+) \\| ([^|]+?) \\| ([^|]+?) \\| (\\d+) \\| " + NUM, "g"), S("SIN DRIVER"))
+    .map(function (m) { return {pais: m[1].trim(), ceco: m[2], vehiculo: m[3].trim(), destino: m[4].trim(), lineas: +m[5], pen: num(m[6])}; });
+  D.sinmapeo = S("SIN MAPEO");
+  D.difs = todos(/(b\d_[a-z_]+) \| (\d+) \| filas/g, S("DIFERENCIAS")).map(function (m) { return {k: m[1], n: +m[2]}; });
+  if (!D.controles.length) throw new Error("No se encontraron controles en el texto.");
+  return D;
+}
+
+/* ───────────── gráficos SVG ───────────── */
+function barrasApiladas(filas, ancho) {
+  // filas: [{lbl, dir, ind}] en valores absolutos
+  var W = ancho || 560, lblW = 96, valW = 70, h = 26, gap = 8, H = filas.length * (h + gap) + 4;
+  var max = Math.max.apply(null, filas.map(function (f) { return f.dir + f.ind; }).concat([1]));
+  var esc_ = (W - lblW - valW) / max, s = "";
+  filas.forEach(function (f, i) {
+    var y = i * (h + gap) + 2, wd = f.dir * esc_, wi = f.ind * esc_;
+    s += '<text x="' + (lblW - 8) + '" y="' + (y + h / 2 + 4) + '" text-anchor="end" font-size="12">' + esc(f.lbl) + "</text>";
+    s += '<rect x="' + lblW + '" y="' + y + '" width="' + Math.max(wd, 0) + '" height="' + h + '" rx="3" fill="var(--dir)"><title>' + esc(f.lbl) + " · Directo " + mill(f.dir) + " M</title></rect>";
+    s += '<rect x="' + (lblW + wd) + '" y="' + y + '" width="' + Math.max(wi, 0) + '" height="' + h + '" rx="3" fill="var(--ind)"><title>' + esc(f.lbl) + " · Indirecto " + mill(f.ind) + " M</title></rect>";
+    s += '<text x="' + (lblW + wd + wi + 6) + '" y="' + (y + h / 2 + 4) + '" font-size="12" font-weight="600">' + mill(f.dir + f.ind) + "</text>";
+  });
+  return '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" role="img" aria-label="Gráfico de barras">' + s + "</svg>";
+}
+function barrasSimples(filas, color) {
+  var W = 560, lblW = 160, valW = 70, h = 24, gap = 8, H = filas.length * (h + gap) + 4;
+  var max = Math.max.apply(null, filas.map(function (f) { return f.v; }).concat([1])), k = (W - lblW - valW) / max, s = "";
+  filas.forEach(function (f, i) {
+    var y = i * (h + gap) + 2, w = f.v * k;
+    s += '<text x="' + (lblW - 8) + '" y="' + (y + h / 2 + 4) + '" text-anchor="end" font-size="12">' + esc(f.lbl) + "</text>";
+    s += '<rect x="' + lblW + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f.c || color) + '"><title>' + esc(f.lbl) + " · " + mill(f.v) + " M</title></rect>";
+    s += '<text x="' + (lblW + w + 6) + '" y="' + (y + h / 2 + 4) + '" font-size="12" font-weight="600">' + mill(f.v) + "</text>";
+  });
+  return '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" role="img" aria-label="Gráfico de barras">' + s + "</svg>";
+}
+function dona(partes) {
+  var total = partes.reduce(function (a, p) { return a + p.v; }, 0) || 1, R = 70, r = 44, cx = 90, cy = 90, a0 = -Math.PI / 2, s = "";
+  partes.forEach(function (p) {
+    var a1 = a0 + 2 * Math.PI * p.v / total;
+    if (p.v > 0) {
+      var large = (a1 - a0) > Math.PI ? 1 : 0;
+      if (p.v === total) a1 = a0 + 2 * Math.PI - 0.0001;
+      var x0 = cx + R * Math.cos(a0), y0 = cy + R * Math.sin(a0), x1 = cx + R * Math.cos(a1), y1 = cy + R * Math.sin(a1);
+      var xi1 = cx + r * Math.cos(a1), yi1 = cy + r * Math.sin(a1), xi0 = cx + r * Math.cos(a0), yi0 = cy + r * Math.sin(a0);
+      s += '<path d="M' + x0 + " " + y0 + " A" + R + " " + R + " 0 " + large + " 1 " + x1 + " " + y1 + " L" + xi1 + " " + yi1 + " A" + r + " " + r + " 0 " + large + " 0 " + xi0 + " " + yi0 + 'Z" fill="' + p.c + '"><title>' + esc(p.lbl) + ": " + ent(p.v) + "</title></path>";
+    }
+    a0 = a1;
+  });
+  s += '<text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" font-size="20" font-weight="700">' + ent(total) + '</text><text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" font-size="11" fill="var(--suave)">líneas</text>';
+  var ley = partes.map(function (p) { return '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px solid var(--borde)"><span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + p.c + ';margin-right:6px"></i>' + esc(p.lbl) + '</span><span class="n" style="font-variant-numeric:tabular-nums">' + ent(p.v) + " · " + fmt1.format(100 * p.v / total) + " %" + (p.extra ? '<br><span class="muted" style="font-size:12px">' + p.extra + "</span>" : "") + "</span></div>"; }).join("");
+  return '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 180 180" width="170" height="170" role="img" aria-label="Gráfico de dona">' + s + '</svg><div style="flex:1;min-width:200px">' + ley + "</div></div>";
+}
+
+/* ───────────── render ───────────── */
+var D = null;
+function render() {
+  var criticos = D.controles.filter(function (c) { return /^(A3|B[1-4])$/.test(c.cod); });
+  var fallas = D.controles.filter(function (c) { return c.resultado === "FALLA"; });
+  var revisar = D.controles.filter(function (c) { return c.resultado === "REVISAR"; });
+  var critOk = criticos.filter(function (c) { return c.resultado === "OK"; }).length;
+  var ok = D.veredicto === "OK" && !fallas.length;
+  $("sub-fecha").textContent = "Credicorp Capital · Planeamiento Financiero · reporte del " + (D.fecha || "—");
+
+  $("veredicto").innerHTML = '<div class="sello ' + (ok ? "ok" : "falla") + '">' + (ok ? "✓" : "✕") + "</div><div><h2>" +
+    (ok ? "Validado: todo se distribuyó correctamente" : "Hay controles críticos con FALLA: no publicar el BI") + "</h2><p>" +
+    critOk + " de " + criticos.length + " controles críticos OK · " + revisar.length + " punto(s) para revisar con negocio · diferencia contable vs Dir/Ind: " +
+    (D.total ? m2(D.total.dif) : "—") + " PEN</p></div>";
+
+  var est = {}; D.estados.forEach(function (e) { est[e.estado] = e; });
+  var okL = (est["OK"] || {lineas: 0}).lineas + (est["OK con alerta"] || {lineas: 0}).lineas;
+  var totL = D.estados.reduce(function (a, e) { return a + e.lineas; }, 0) || 1;
+  var pl = {}; D.plantillas.forEach(function (p) { pl[p.entrega] = p.n; });
+  var tot = D.total || {cont: 0, dir: 0, ind: 0, dif: 0};
+  var kp = [
+    {l: "Gasto contable (PEN)", v: mill(tot.cont) + " M", s: "Líneas OK + OK con alerta"},
+    {l: "Directo / Indirecto", v: fmt1.format(pct(tot.dir, tot.cont)) + " % / " + fmt1.format(pct(tot.ind, tot.cont)) + " %", s: mill(tot.dir) + " M · " + mill(tot.ind) + " M"},
+    {l: "Líneas que entran al BI", v: ent(okL), s: fmt1.format(100 * okL / totL) + " % de " + ent(totL) + " líneas"},
+    {l: "Plantillas", v: ent(pl["Recibida"] || 0) + " recibidas", s: (pl["Pendiente"] || 0) + " pendientes de entrega"}
+  ];
+  $("kpis").innerHTML = kp.map(function (k) { return '<div class="card kpi"><div class="lbl">' + esc(k.l) + '</div><div class="val">' + esc(k.v) + '</div><div class="sub">' + esc(k.s) + "</div></div>"; }).join("");
+
+  $("graf-pais").innerHTML = barrasApiladas(D.paises.map(function (p) { return {lbl: p.pais, dir: Math.abs(p.dir), ind: Math.abs(p.ind)}; }));
+  $("mini-controles").innerHTML = '<div class="chk">' + D.controles.map(function (c) {
+    var i = CONTROLES_INFO[c.cod] || {t: c.cod};
+    return '<span class="pill ' + c.resultado + '">' + c.resultado + "</span><div><b>" + c.cod + " · " + esc(i.t) + '</b> <span class="muted">' + esc(c.detalle) + "</span></div>";
+  }).join("") + "</div>";
+  var ce = {"OK": "var(--ok)", "OK con alerta": "#F2B84B", "Cuarentena": "var(--coral)", "Rechazada": "var(--bad)"};
+  $("graf-estado").innerHTML = dona(D.estados.slice().sort(function (a, b) { return ["OK", "OK con alerta", "Cuarentena", "Rechazada"].indexOf(a.estado) - ["OK", "OK con alerta", "Cuarentena", "Rechazada"].indexOf(b.estado); })
+    .map(function (e) { return {lbl: e.estado, v: e.lineas, c: ce[e.estado] || "var(--gris)", extra: m2(e.pen) + " PEN"}; }));
+  var n1t = {}; D.n1.forEach(function (r) { n1t[r.n1] = (n1t[r.n1] || 0) + Math.abs(r.cont); });
+  $("graf-n1").innerHTML = barrasSimples(N1_ORDEN.filter(function (n) { return n in n1t; }).map(function (n, i) { return {lbl: n, v: n1t[n], c: ["var(--coral)", "var(--dir)", "var(--gris)", "#F2B84B", "var(--bad)"][i]}; }), "var(--coral)");
+
+  // controles detallados
+  $("lista-controles").innerHTML = D.controles.map(function (c) {
+    var i = CONTROLES_INFO[c.cod] || {t: c.cod, q: "", p: "", f: ""};
+    var tipo = /^(A3|B[1-4])$/.test(c.cod) ? "Crítico" : (c.cod === "B7" ? "Revisar" : "Dato");
+    return "<details" + (c.resultado !== "OK" ? " open" : "") + '><summary><span class="pill ' + c.resultado + '">' + c.resultado + "</span>" + c.cod + " · " + esc(i.t) +
+      ' <span class="pill ' + tipo + '">' + tipo + '</span><span class="muted" style="font-weight:400;margin-left:auto">casos ' + ent(c.casos) + " · con diferencia " + ent(c.dif) + "</span></summary>" +
+      '<div class="cuerpo"><p style="margin:0 0 6px"><b>Resultado:</b> ' + esc(c.detalle) + "</p><ul class=\"lim\"><li><b>Qué prueba:</b> " + esc(i.q) + "</li><li><b>Por qué importa:</b> " + esc(i.p) + "</li><li><b>Si no da OK:</b> " + esc(i.f) + "</li></ul></div></details>";
+  }).join("");
+
+  // cruce por país
+  var cel = function (x) { return '<td class="n ' + (Math.abs(x) < 0.005 ? "cero" : "mal") + '">' + m2(x) + "</td>"; };
+  $("t-pais").innerHTML = '<thead><tr><th>País</th><th class="n">Contable (PEN)</th><th class="n">Directo</th><th class="n">Indirecto</th><th class="n">Dir + Ind</th><th class="n">% indirecto</th><th class="n">Diferencia</th></tr></thead><tbody>' +
+    D.paises.concat(D.total ? [Object.assign({}, D.total, {pais: "TOTAL"})] : []).map(function (p) {
+      return '<tr class="' + (p.pais === "TOTAL" ? "total" : "") + '"><td>' + esc(p.pais) + '</td><td class="n">' + m2(p.cont) + '</td><td class="n">' + m2(p.dir) + '</td><td class="n">' + m2(p.ind) + '</td><td class="n">' + m2(p.cont - p.dif) + '</td><td class="n">' + fmt1.format(pct(p.ind, p.cont)) + " %</td>" + cel(p.dif) + "</tr>";
+    }).join("") + "</tbody>";
+  var paisesN1 = D.paises.map(function (p) { return p.pais; });
+  $("f-pais-n1").innerHTML = '<option value="">Todos</option>' + paisesN1.map(function (p) { return "<option>" + esc(p) + "</option>"; }).join("");
+  $("f-pais-udn").innerHTML = '<option value="">Todos (suma)</option>' + paisesN1.map(function (p) { return "<option>" + esc(p) + "</option>"; }).join("");
+  renderN1(); renderUdn();
+  var pe = D.paises.filter(function (p) { return p.pais === "Perú"; })[0] || D.paises[0];
+  $("cruce-bi").innerHTML = pe ? "<li>En el BI filtra <b>" + esc(pe.pais) + "</b>.</li><li>Página <b>Formato Perú</b>: el total debe dar <b>" + m2(pe.cont) + "</b>.</li><li>Página <b>Dir-Ind</b>: Directo <b>" + m2(pe.dir) + "</b> e Indirecto <b>" + m2(pe.ind) + "</b>.</li><li>Repite con otro país de la tabla de arriba.</li>" : "";
+
+  // calidad
+  var totPl = D.plantillas.reduce(function (a, p) { return a + p.n; }, 0) || 1;
+  $("plantillas").innerHTML = D.plantillas.map(function (p) {
+    return '<div style="margin:6px 0"><div style="display:flex;justify-content:space-between"><span>' + esc(p.entrega) + "</span><b>" + ent(p.n) + '</b></div><div class="barra"><i style="width:' + (100 * p.n / totPl) + "%;background:" + (p.entrega === "Recibida" ? "var(--ok)" : "var(--coral)") + '"></i></div></div>';
+  }).join("") + '<p class="muted" style="margin-bottom:0">El maestro tiene las plantillas esperadas; las "Pendiente" son las que aún no llegan o llegaron con otro nombre (flag F14 → <code>alias_plantilla</code>).</p>';
+  $("t-filas").innerHTML = "<thead><tr><th>Tabla</th><th class=\"n\">Filas</th></tr></thead><tbody>" + D.filas.map(function (f) { return "<tr><td><code>ppto27_gld_" + esc(f.tabla) + '</code></td><td class="n">' + ent(f.filas) + "</td></tr>"; }).join("") + "</tbody>";
+  var sdTot = D.sindriver.reduce(function (a, r) { return a + r.pen; }, 0);
+  $("t-sindriver").innerHTML = '<thead><tr><th>País</th><th>CeCo</th><th>Vehículo</th><th>Destino por regla</th><th class="n">Líneas</th><th class="n">PEN</th></tr></thead><tbody>' +
+    (D.sindriver.length ? D.sindriver.map(function (r) { return "<tr><td>" + esc(r.pais) + "</td><td>" + esc(r.ceco) + "</td><td>" + esc(r.vehiculo) + "</td><td>" + esc(r.destino) + '</td><td class="n">' + ent(r.lineas) + '</td><td class="n">' + m2(r.pen) + "</td></tr>"; }).join("") +
+      '<tr class="total"><td colspan="5">Total mostrado (top 15)</td><td class="n">' + m2(sdTot) + "</td></tr>" : '<tr><td colspan="6" class="muted">Ninguno</td></tr>') + "</tbody>";
+  $("sinmapeo").innerHTML = D.sinmapeo ? '<span class="pill REVISAR">REVISAR</span> <code style="white-space:normal">' + esc(D.sinmapeo) + "</code>" : '<span class="pill OK">OK</span> Ninguna: todas las líneas con monto tienen Nivel 1 / Nivel 2 del Formato Perú.';
+  $("difs").innerHTML = D.difs.map(function (d) { return '<div><span class="pill ' + (d.n ? "FALLA" : "OK") + '">' + (d.n ? "FALLA" : "OK") + "</span> <code>" + esc(d.k) + "</code>: " + ent(d.n) + " filas con diferencia</div>"; }).join("") || '<span class="muted">Sin datos</span>';
+  var pend = [];
+  if (pl["Pendiente"]) pend.push("<b>" + pl["Pendiente"] + " plantilla(s) pendiente(s):</b> verificar en <code>ppto27_gld_dim_plantilla</code> (entrega = 'Pendiente') si faltan o llegaron con otro nombre → <code>alias_plantilla</code>.");
+  if (D.sindriver.length) {
+    var porCeco = {}; D.sindriver.forEach(function (r) { porCeco[r.ceco] = (porCeco[r.ceco] || 0) + r.pen; });
+    var top = Object.keys(porCeco).sort(function (a, b) { return porCeco[a] - porCeco[b]; })[0];
+    pend.push("<b>CeCos sin driver:</b> " + D.sindriver.length + " mostrados; el mayor es el CeCo <b>" + esc(top) + "</b> (" + m2(porCeco[top]) + " PEN). Decidir si se agrega a la tabla de drivers.");
+  }
+  D.paises.forEach(function (p) { if (Math.abs(p.ind) < 0.005 && Math.abs(p.cont) > 0) pend.push("<b>" + esc(p.pais) + " sin indirectos:</b> todo su gasto es directo. Confirmar la regla de soporte para " + esc(p.pais) + "."); });
+  revisar.forEach(function (c) { if (c.cod !== "B7") pend.push("<b>" + c.cod + ":</b> " + esc(c.detalle)); });
+  pend.push("<b>Plantillas oficiales:</b> repetir esta validación cuando las áreas devuelvan las versiones reales.");
+  $("pendientes").innerHTML = pend.map(function (x) { return "<li>" + x + "</li>"; }).join("");
+  $("pie").innerHTML = "Dashboard generado el " + esc(GENERADO) + " · datos del reporte de <code>95_validar</code> del " + esc(D.fecha || "—") + " · archivo autónomo: no usa internet ni librerías externas.";
+}
+function renderN1() {
+  var sel = $("f-pais-n1").value;
+  var filas = D.n1.filter(function (r) { return !sel || r.pais === sel; }), agg = {};
+  filas.forEach(function (r) { var a = agg[r.n1] || (agg[r.n1] = {cont: 0, dirind: 0, dif: 0}); a.cont += r.cont; a.dirind += r.dirind; a.dif += r.dif; });
+  var cuerpo = "", tc = 0, td = 0, tf = 0;
+  if (sel) {
+    N1_ORDEN.forEach(function (n) { var a = agg[n]; if (!a) return; tc += a.cont; td += a.dirind; tf += a.dif;
+      cuerpo += "<tr><td>" + esc(n) + '</td><td class="n">' + m2(a.cont) + '</td><td class="n">' + m2(a.dirind) + '</td><td class="n ' + (Math.abs(a.dif) < 0.005 ? "cero" : "mal") + '">' + m2(a.dif) + "</td></tr>"; });
+  } else {
+    D.paises.forEach(function (p) {
+      var rs = D.n1.filter(function (r) { return r.pais === p.pais; }).sort(function (a, b) { return N1_ORDEN.indexOf(a.n1) - N1_ORDEN.indexOf(b.n1); });
+      rs.forEach(function (r, i) { tc += r.cont; td += r.dirind; tf += r.dif;
+        cuerpo += "<tr><td>" + (i === 0 ? "<b>" + esc(r.pais) + "</b>" : "") + "</td><td>" + esc(r.n1) + '</td><td class="n">' + m2(r.cont) + '</td><td class="n">' + m2(r.dirind) + '</td><td class="n ' + (Math.abs(r.dif) < 0.005 ? "cero" : "mal") + '">' + m2(r.dif) + "</td></tr>"; });
+    });
+  }
+  var cab = sel ? "<th>Nivel 1</th>" : "<th>País</th><th>Nivel 1</th>";
+  $("t-n1").innerHTML = "<thead><tr>" + cab + '<th class="n">Contable</th><th class="n">Dir/Ind</th><th class="n">Diferencia</th></tr></thead><tbody>' + cuerpo +
+    '<tr class="total"><td' + (sel ? "" : ' colspan="2"') + '>Total</td><td class="n">' + m2(tc) + '</td><td class="n">' + m2(td) + '</td><td class="n">' + m2(tf) + "</td></tr></tbody>";
+}
+function renderUdn() {
+  var sel = $("f-pais-udn").value, agg = {};
+  D.udn.filter(function (r) { return !sel || r.pais === sel; }).forEach(function (r) { var a = agg[r.udn] || (agg[r.udn] = {dir: 0, ind: 0}); a.dir += r.dir; a.ind += r.ind; });
+  var filas = Object.keys(agg).map(function (u) { return {lbl: u, dir: Math.abs(agg[u].dir), ind: Math.abs(agg[u].ind)}; }).sort(function (a, b) { return (b.dir + b.ind) - (a.dir + a.ind); });
+  $("graf-udn").innerHTML = filas.length ? barrasApiladas(filas) : '<p class="muted">Sin datos</p>';
+  $("pct-ind").innerHTML = D.paises.map(function (p) { var pc = pct(p.ind, p.cont);
+    return '<div style="margin:8px 0"><div style="display:flex;justify-content:space-between"><span>' + esc(p.pais) + "</span><b>" + fmt1.format(pc) + ' %</b></div><div class="barra"><i style="width:' + Math.min(100, Math.max(0, pc)) + '%"></i></div></div>'; }).join("");
+  var paises = D.paises.map(function (p) { return p.pais; }), udns = Array.from(new Set(D.udn.map(function (r) { return r.udn; }))).sort(), idx = {};
+  D.udn.forEach(function (r) { idx[r.pais + "|" + r.udn] = r; });
+  $("t-udn").innerHTML = "<thead><tr><th>UdN</th>" + paises.map(function (p) { return '<th class="n">' + esc(p) + "</th>"; }).join("") + '<th class="n">Total</th></tr></thead><tbody>' +
+    udns.map(function (u) { var t = 0;
+      return "<tr><td><b>" + esc(u) + "</b></td>" + paises.map(function (p) { var r = idx[p + "|" + u]; if (!r) return '<td class="n muted">—</td>'; var v = r.dir + r.ind; t += v;
+        return '<td class="n" title="Directo ' + m2(r.dir) + " · Indirecto " + m2(r.ind) + '">' + m2(v) + "</td>"; }).join("") + '<td class="n"><b>' + m2(t) + "</b></td></tr>"; }).join("") +
+    '<tr class="total"><td>Total</td>' + D.paises.map(function (p) { return '<td class="n">' + m2(p.dir + p.ind) + "</td>"; }).join("") + '<td class="n">' + m2(D.paises.reduce(function (a, p) { return a + p.dir + p.ind; }, 0)) + "</td></tr></tbody>";
+}
+
+/* ───────────── contenido fijo: Formato Perú y flags ───────────── */
+function renderFijo() {
+  var html = "", n1 = null, grupo = null;
+  ESTRUCTURA.forEach(function (e) {
+    if (e[0] !== n1) { if (n1 !== null) html += "</div>"; html += '<div class="bloque"><h4>' + esc(e[0]) + "</h4>"; n1 = e[0]; grupo = null; }
+    if (e[1] && e[1] !== grupo) { html += '<div class="grupo">' + esc(e[1]) + "</div>"; }
+    grupo = e[1];
+    html += "<div" + (e[1] ? ' style="padding-left:12px"' : "") + ">" + esc(e[2]) + "</div>";
+  });
+  $("fp").innerHTML = html + "</div>";
+  var sevs = ["BLOQUEANTE", "ERROR", "ALERTA", "INFO"], activo = {};
+  sevs.forEach(function (s) { activo[s] = true; });
+  $("chips-sev").innerHTML = sevs.map(function (s) { var n = CATALOGO.filter(function (f) { return f[2] === s; }).length; return '<button type="button" class="chip" aria-pressed="true" data-sev="' + s + '">' + s + " (" + n + ")</button>"; }).join(" ");
+  function pintar() {
+    var q = $("f-flag").value.toLowerCase();
+    var fs = CATALOGO.filter(function (f) { return activo[f[2]] && (!q || f.join(" ").toLowerCase().indexOf(q) >= 0); });
+    $("t-flags").innerHTML = "<thead><tr><th>Código</th><th>Severidad</th><th>Ámbito</th><th>Flag</th><th>Regla</th><th>Acción</th></tr></thead><tbody>" +
+      fs.map(function (f) { return "<tr><td><b>" + esc(f[0]) + '</b></td><td><span class="pill ' + esc(f[2]) + '">' + esc(f[2]) + "</span></td><td>" + esc(f[1]) + "</td><td>" + esc(f[3]) + '</td><td class="muted">' + esc(f[4]) + "</td><td>" + esc(f[5]) + "</td></tr>"; }).join("") +
+      (fs.length ? "" : '<tr><td colspan="6" class="muted">Sin resultados</td></tr>') + "</tbody>";
+  }
+  $("f-flag").addEventListener("input", pintar);
+  $("chips-sev").addEventListener("click", function (ev) { var b = ev.target.closest("button[data-sev]"); if (!b) return; activo[b.dataset.sev] = !activo[b.dataset.sev]; b.setAttribute("aria-pressed", activo[b.dataset.sev]); pintar(); });
+  pintar();
+}
+
+/* ───────────── pestañas, tema, actualizar ───────────── */
+function abrir(tab) {
+  document.querySelectorAll("nav.tabs button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === tab); });
+  document.querySelectorAll("section.panel").forEach(function (s) { s.classList.toggle("activo", s.id === "panel-" + tab); });
+  guardar("ppto27_tab", tab);
+}
+document.querySelector("nav.tabs").addEventListener("click", function (ev) { var b = ev.target.closest("button[data-tab]"); if (b) abrir(b.dataset.tab); });
+$("btn-tema").addEventListener("click", function () {
+  var oscuro = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = oscuro ? "light" : "dark"; guardar("ppto27_tema", document.documentElement.dataset.theme);
+});
+$("f-pais-n1").addEventListener("change", renderN1);
+$("f-pais-udn").addEventListener("change", renderUdn);
+function cargar(texto, origen) {
+  try {
+    D = parsear(texto); render();
+    $("msg-reporte").innerHTML = '<span style="color:var(--ok)">✓ Reporte procesado (' + esc(origen) + "): " + D.controles.length + " controles, " + D.paises.length + " países, " + D.udn.length + " UdN × país.</span>";
+    return true;
+  } catch (e) {
+    $("msg-reporte").innerHTML = '<span style="color:var(--bad)">✕ ' + esc(e.message) + "</span>";
+    return false;
+  }
+}
+$("btn-procesar").addEventListener("click", function () { var t = $("txt-reporte").value; if (cargar(t, "pegado")) { guardar("ppto27_reporte", t); abrir("resumen"); window.scrollTo(0, 0); } });
+$("btn-ejemplo").addEventListener("click", function () { $("txt-reporte").value = REPORTE_BASE; cargar(REPORTE_BASE, "incluido"); guardar("ppto27_reporte", ""); });
+
+(function inicio() {
+  var tema = leer("ppto27_tema"); if (tema) document.documentElement.dataset.theme = tema;
+  renderFijo();
+  var guardado = leer("ppto27_reporte");
+  if (!(guardado && cargar(guardado, "guardado en este navegador"))) cargar(REPORTE_BASE, "incluido");
+  $("txt-reporte").value = guardado || REPORTE_BASE;
+  var tab = leer("ppto27_tab"); if (tab && $("panel-" + tab)) abrir(tab);
+})();
+</script>
+</body>
+</html>

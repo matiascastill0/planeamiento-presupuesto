@@ -1,0 +1,10 @@
+﻿id_ceco,pais,ceco,ceco_nombre,agrupacion,sub_unidad,tipo_ceco
+Perú|401,Perú,401,401 - Banca Privada Lima,WM,WM,Negocio
+Perú|421,Perú,421,421 - Mercado de Capitales,MDK,MDK,Negocio
+Perú|109,Perú,109,109 - Riesgos Operativos,Staff - Riesgo,STAFF,Staff
+Perú|303,Perú,303,303 - Dirección Finanzas,Staff - Finanzas,STAFF,Staff
+Colombia|451,Colombia,451,451 - Asset Management Fondos,AM,AM,Negocio
+Colombia|109,Colombia,109,109 - Riesgos Operativos,Staff - Riesgo,STAFF,Staff
+Colombia|101,Colombia,101,101 - Gerencia General,Staff - Gerencia General,STAFF,Staff
+Chile|402,Chile,402,402 - Wealth Management Santiago,WM,WM,Negocio
+Chile|303,Chile,303,303 - Dirección Finanzas,Staff - Finanzas,STAFF,Staff

@@ -1,0 +1,83 @@
+﻿// © 2026 Credicorp Capital. Uso interno. Ver LICENSE.
+MEDIDAS DAX DEL BI Ppto27 (copiar en Power BI: Modelado > Nueva medida, una por una, en una tabla _Medidas)
+
+===== 1 Contable =====
+// Ppto 2027 contable en PEN (líneas válidas). Gasto en negativo.
+Ppto PEN = CALCULATE ( SUM ( fact_ppto[monto_pen] ))
+// formato: #,0;(#,0)
+
+// Mismo Ppto en positivo, para gráficos.
+Gasto PEN = - [Ppto PEN]
+// formato: #,0
+
+// Sólo con un país seleccionado (no se suman monedas distintas).
+Ppto Moneda Local = IF ( HASONEVALUE ( dim_pais[id_pais] ), CALCULATE ( SUM ( fact_ppto[monto_local] )))
+// formato: #,0;(#,0)
+
+// Moneda local en positivo.
+Gasto Moneda Local = - [Ppto Moneda Local]
+// formato: #,0
+
+// Líneas de plantilla con Ppto 2027.
+Líneas = DISTINCTCOUNT ( fact_ppto[id_linea] )
+// formato: #,0
+
+Plantillas = DISTINCTCOUNT ( fact_ppto[id_plantilla] )
+// formato: #,0
+
+Gasto PEN Mes Anterior = CALCULATE ( [Gasto PEN], DATEADD ( dim_fecha[fecha], -1, MONTH ) )
+// formato: #,0
+
+Var % vs Mes Anterior = DIVIDE ( [Gasto PEN] - [Gasto PEN Mes Anterior], [Gasto PEN Mes Anterior] )
+// formato: 0.0%
+
+
+===== 2 Calidad =====
+// Ppto de líneas con ERROR: no entra al contable.
+Ppto Cuarentena PEN = CALCULATE ( SUM ( fact_ppto[monto_pen] ), fact_ppto[estado_linea] = "Cuarentena" )
+// formato: #,0;(#,0)
+
+// Todo lo que trajeron las plantillas (válido + cuarentena): control 100 = 100.
+Ppto Total Cargado PEN = SUM ( fact_ppto[monto_pen] )
+// formato: #,0;(#,0)
+
+% Cuarentena = DIVIDE ( [Ppto Cuarentena PEN], [Ppto Total Cargado PEN] )
+// formato: 0.0%
+
+Flags = COUNTROWS ( fact_flags )
+// formato: #,0
+
+Flags Error = CALCULATE ( [Flags], dim_flag[severidad] IN { "BLOQUEANTE", "ERROR" } )
+// formato: #,0
+
+Flags Alerta = CALCULATE ( [Flags], dim_flag[severidad] = "ALERTA" )
+// formato: #,0
+
+Plantillas con Error = CALCULATE ( DISTINCTCOUNT ( fact_flags[id_plantilla] ), dim_flag[severidad] IN { "BLOQUEANTE", "ERROR" } )
+// formato: #,0
+
+
+===== 3 Dir-Ind =====
+Dir/Ind PEN = SUM ( fact_gestion_dirind[monto_pen] )
+// formato: #,0;(#,0);-
+
+Dir/Ind Moneda Local = IF ( HASONEVALUE ( dim_pais[id_pais] ), SUM ( fact_gestion_dirind[monto_local] ) )
+// formato: #,0;(#,0);-
+
+Dir/Ind Gasto Presentado = - [Dir/Ind Presentado]
+// formato: #,0;(#,0);-
+
+Dir/Ind Cuadre vs Contable PEN = [Dir/Ind PEN] - [Ppto PEN]
+// formato: #,0.00;(#,0.00);-
+
+
+===== 4 Moneda seleccionada =====
+Ppto Presentado = SWITCH ( SELECTEDVALUE ( Moneda[Moneda], "PEN" ), "PEN", [Ppto PEN], [Ppto Moneda Local] )
+// formato: #,0;(#,0);-
+
+Gasto Presentado = - [Ppto Presentado]
+// formato: #,0;(#,0);-
+
+Dir/Ind Presentado = SWITCH ( SELECTEDVALUE ( Moneda[Moneda], "PEN" ), "PEN", [Dir/Ind PEN], [Dir/Ind Moneda Local] )
+// formato: #,0;(#,0);-
+

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.ipynb text eol=lf linguist-language=Jupyter\ Notebook
+*.html linguist-documentation
+datos-simulados/** text eol=crlf

@@ -1,0 +1,29 @@
+# --- Datos: nunca se suben (montos reales, CeCos, proveedores) ---
+*.xlsx
+*.xlsm
+*.xlsb
+*.xls
+*.csv
+*.pkl
+*.parquet
+*.zip
+*.pbix
+*.pbip
+*.SemanticModel/
+*.Report/
+salida/
+# Excepción: datos simulados y catálogos sin montos
+!datos-simulados/CSV/*.csv
+!datos-simulados/catalogos/*.csv
+
+# --- Entornos y temporales ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+~$*

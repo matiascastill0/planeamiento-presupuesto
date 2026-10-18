@@ -1,0 +1,1057 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ppto27 Guía del Proceso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: índice fijo a la izquierda + documento por etapas; cada diagrama vive en un "lienzo" con cuadrícula de puntos estilo Lucidchart */
+:root{
+  --bg:#ECEFF1; --paper:#FFFFFF; --ink:#15192C; --muted:#4F6772; --line:#D7DDE2; --dot:#C1CBD2;
+  --coral:#D74028; --coral-t:#FDE3D3; --amber:#D68502; --amber-t:#FEF4CC; --green:#188737; --green-t:#DAFAD2;
+  --sage:#637D8D; --sage-t:#E4E9EC; --inkfill:#15192C; --onink:#FFFFFF; --red:#BE1B20; --edge:#4F6772;
+  --blue:#2F71E5; --blue-t:#DCE8FC; --navy:#15192C; --navy2:#103981;
+  --f-ui:Inter,"Segoe UI","Segoe UI Variable",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --f-mono:Consolas,"Cascadia Mono","SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E111D; --paper:#171C2C; --ink:#ECEFF1; --muted:#AAB9C2; --line:#2B3347; --dot:#262D40;
+  --coral:#EA6B58; --coral-t:#45221D; --amber:#FBC141; --amber-t:#40341A; --green:#50C45B; --green-t:#1B3522;
+  --sage:#AAB9C2; --sage-t:#222A3A; --inkfill:#ECEFF1; --onink:#15192C; --red:#EA6B58; --edge:#AAB9C2;
+  --blue:#6294EB; --blue-t:#1C2B4A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E111D; --paper:#171C2C; --ink:#ECEFF1; --muted:#AAB9C2; --line:#2B3347; --dot:#262D40;
+  --coral:#EA6B58; --coral-t:#45221D; --amber:#FBC141; --amber-t:#40341A; --green:#50C45B; --green-t:#1B3522;
+  --sage:#AAB9C2; --sage-t:#222A3A; --inkfill:#ECEFF1; --onink:#15192C; --red:#EA6B58; --edge:#AAB9C2;
+  --blue:#6294EB; --blue-t:#1C2B4A; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-ui)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+a{color:var(--coral)}
+:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:28px 80px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;max-height:calc(100vh - 40px);overflow:auto;font-size:13.5px}
+.toc .brand{font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:12px}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.toc a{display:flex;gap:10px;padding:6px 10px;border-radius:6px;color:var(--ink);text-decoration:none}
+.toc a span{color:var(--muted);font-variant-numeric:tabular-nums;min-width:18px}
+.toc a:hover,.toc a.on{background:var(--paper);box-shadow:inset 3px 0 0 var(--coral)}
+.theme{margin-top:16px;font:inherit;font-size:13px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 10px;cursor:pointer}
+main{min-width:0}
+header.hero{padding-block:0 8px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.12;margin:.3em 0 .4em;text-wrap:balance;font-weight:800;letter-spacing:-.02em}
+h2{font-size:27px;line-height:1.2;margin:0 0 .5em;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;margin:1.6em 0 .5em;font-weight:700}
+p{max-width:72ch;margin:.6em 0}
+.lead{font-size:17.5px;color:var(--ink);max-width:68ch}
+.muted{color:var(--muted)}
+section.etapa{padding-block:44px 8px;border-bottom:1px solid var(--line)}
+.etq{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.etq b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--inkfill);color:var(--onink);font-size:13px;letter-spacing:0}
+.aviso{display:flex;gap:12px;align-items:flex-start;background:var(--amber-t);border:1px solid var(--amber);border-radius:8px;padding:12px 16px;margin:18px 0 0;font-size:14px;max-width:none}
+.aviso strong{white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.kpi .n{font-size:28px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .l{font-size:13px;color:var(--muted)}
+.logo{display:inline-flex;align-items:center;background:#FFFFFF;border-radius:8px;padding:8px 12px;border:1px solid var(--line)}
+.logo img{height:26px;width:auto;display:block}
+.equipo{margin-top:22px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px}
+.equipo .tit{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);flex:1 1 100%}
+.persona{display:flex;align-items:center;gap:10px;min-width:0}
+.ini{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--inkfill);color:var(--onink);font-weight:800;font-size:13px;flex:none}
+.persona b{font-weight:700;font-size:15px}
+.toc .logo{margin-bottom:14px}
+.autores{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.autor{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.autor .ini{width:46px;height:46px;font-size:15px}
+.autor b{font-size:15.5px;font-weight:700;line-height:1.3}
+.autor .rol{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral)}
+.autor .desde{font-size:13px;color:var(--muted)}
+@media (max-width:980px){.autores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.autores{grid-template-columns:minmax(0,1fr)}}
+/* portada en banda navy, como las láminas de la marca */
+.banda{position:relative;overflow:hidden;background:#15192C;color:#ECEFF1;border-radius:16px;padding:34px 38px 30px;margin-bottom:8px;
+  background-image:linear-gradient(115deg,rgba(255,255,255,.035) 0 38%,transparent 38%),linear-gradient(160deg,transparent 60%,rgba(0,0,0,.25))}
+:root[data-theme="dark"] .banda{box-shadow:0 0 0 1px #2B3347}
+.banda .montes{position:absolute;right:-6px;bottom:-2px;width:min(30%,340px);height:auto;pointer-events:none;opacity:.95}
+.banda>*:not(.montes){position:relative}
+.banda .eyebrow{color:#EA6B58}
+.banda h1{color:#FFFFFF;max-width:20ch}
+.banda .lead{color:#C1CBD2;max-width:62ch}
+.banda .kpis{max-width:880px}
+.banda .kpi{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.banda .kpi .n{color:#FFFFFF}.banda .kpi .l{color:#AAB9C2}
+.banda .kpi.top{background:#D74028;border-color:#D74028}.banda .kpi.top .l{color:#FDE3D3}
+.banda .equipo{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);max-width:70%}
+.banda .persona b{font-size:14px}
+.banda .equipo .tit{color:#EA6B58}.banda .persona b{color:#FFFFFF}
+.banda .ini{background:#ECEFF1;color:#15192C}
+.banda .logo{border:0;margin-bottom:22px}
+/* resumen ejecutivo */
+.ejec{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.ejec .c{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:10px;padding:16px 18px;min-width:0}
+.ejec .c:nth-child(2){border-left-color:var(--blue)}.ejec .c:nth-child(3){border-left-color:var(--navy2)}.ejec .c:nth-child(4){border-left-color:var(--green)}
+:root[data-theme="dark"] .ejec .c:nth-child(3){border-left-color:var(--blue)}
+.ejec .c .n{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ejec .c h4{margin:4px 0 6px;font-size:16.5px;font-weight:700}
+.ejec .c p{margin:0;font-size:14px}
+@media (max-width:760px){.ejec{grid-template-columns:minmax(0,1fr)}}
+/* diseño de navegación y secciones */
+nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 12px;box-shadow:0 1px 2px rgba(21,25,44,.04)}
+.toc .brand{padding:0 8px}
+.toc .logo{margin:0 8px 14px}
+.toc a{position:relative;border-radius:10px;padding:7px 10px;transition:background .15s,color .15s}
+.toc a span{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:7px;background:var(--sage-t);color:var(--muted);font-size:11.5px;font-weight:700}
+.toc a:hover{background:var(--sage-t);box-shadow:none}
+.toc a.on{background:#15192C;color:#FFFFFF;box-shadow:none}
+.toc a.on span{background:#D74028;color:#FFFFFF}
+:root[data-theme="dark"] .toc a.on{background:#2F71E5}
+.toc .theme{margin:14px 8px 0}
+.etq{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 14px 4px 4px;box-shadow:0 1px 2px rgba(21,25,44,.05)}
+.etq b{background:linear-gradient(135deg,#15192C 0 55%,#D74028 55%);color:#FFFFFF;width:28px;height:28px}
+.etq::after{content:"";width:22px;height:12px;margin-left:2px;background:linear-gradient(135deg,transparent 50%,#AAB9C2 50%) left/11px 12px no-repeat,linear-gradient(225deg,transparent 50%,#637D8D 50%) 11px 0/11px 12px no-repeat}
+section.etapa h2{position:relative;padding-bottom:12px}
+section.etapa h2::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:4px;border-radius:4px;background:linear-gradient(90deg,#D74028,#2F71E5)}
+section.etapa{border-bottom:0;position:relative}
+section.etapa+section.etapa::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--line) 15%,var(--line) 85%,transparent)}
+.av .ahora{position:relative;overflow:hidden}
+.av .ahora .montes{position:absolute;right:-8px;bottom:-2px;width:46%;opacity:.55;pointer-events:none}
+.av .ahora>*:not(.montes){position:relative}
+.ahorro{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 14px;padding:16px 20px;border-radius:14px;background:linear-gradient(110deg,#FDE3D3,#DCE8FC)}
+.ahorro b{font-size:clamp(34px,5vw,52px);font-weight:800;letter-spacing:-.03em;color:#15192C;line-height:1}
+.ahorro span{font-size:15px;font-weight:600;color:#3B4D56}
+:root[data-theme="dark"] .ahorro{background:linear-gradient(110deg,#45221D,#1C2B4A)}:root[data-theme="dark"] .ahorro b{color:#FFFFFF}:root[data-theme="dark"] .ahorro span{color:#C1CBD2}
+.cierre{position:relative;overflow:hidden;background:#15192C;border-radius:16px;margin-top:40px;min-height:150px;display:flex;align-items:center;padding:24px 32px}
+.cierre .montes{position:absolute;right:-6px;bottom:-2px;width:min(40%,420px);opacity:.95}
+.cierre p{position:relative;margin:0;color:#FFFFFF;font-size:clamp(18px,2.4vw,24px);font-weight:700;letter-spacing:-.01em;max-width:55%}
+@media (max-width:980px){nav.toc{border-radius:12px}}
+@media (max-width:620px){.cierre p{max-width:none}.cierre .montes{opacity:.3}}
+/* pasos de la conexión */
+.pasos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0 18px;counter-reset:p}
+.paso{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0;position:relative}
+.paso span{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#15192C 0 55%,#2F71E5 55%);color:#FFFFFF;font-weight:800;font-size:14px}
+.paso h4{margin:10px 0 4px;font-size:15px}
+.paso p{margin:0;font-size:13.5px;color:var(--muted)}
+.paso:not(:last-child)::after{content:"→";position:absolute;right:-11px;top:22px;color:var(--muted);font-weight:700;z-index:1}
+@media (max-width:980px){.pasos{grid-template-columns:repeat(2,minmax(0,1fr))}.paso::after{display:none}}
+@media (max-width:620px){.pasos{grid-template-columns:minmax(0,1fr)}}
+/* catálogo de flags */
+.sevs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 6px}
+.sev{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0;position:relative;overflow:hidden}
+.sev::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--c)}
+.sev .t{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.sev .n{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.sev p{margin:0;font-size:13.5px;color:var(--muted)}
+.s-bloq{--c:#B23521}.s-err{--c:#D74028}.s-ale{--c:#D68502}.s-inf{--c:#2F71E5}
+:root[data-theme="dark"] .s-bloq{--c:#EA6B58}:root[data-theme="dark"] .s-err{--c:#EA6B58}:root[data-theme="dark"] .s-ale{--c:#FBC141}:root[data-theme="dark"] .s-inf{--c:#6294EB}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .s-bloq,:root:not([data-theme="light"]) .s-err{--c:#EA6B58}:root:not([data-theme="light"]) .s-ale{--c:#FBC141}:root:not([data-theme="light"]) .s-inf{--c:#6294EB}}
+.flg-bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:20px 0 14px;position:sticky;top:0;z-index:2;background:var(--bg);padding:10px 0}
+.flg-bar input{flex:1 1 240px;min-width:0;font:inherit;font-size:14px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.flg-bar input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.seg{display:inline-flex;flex-wrap:wrap;gap:2px;background:var(--sage-t);border-radius:12px;padding:3px}
+.seg button{font:inherit;font-size:13px;font-weight:600;border:0;background:transparent;color:var(--muted);padding:7px 12px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(21,25,44,.14)}
+.flg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.flg{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:box-shadow .15s,transform .15s}
+.flg:hover{box-shadow:0 6px 20px rgba(21,25,44,.08);transform:translateY(-1px)}
+.flg .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.flg .cod{font:700 13px var(--f-mono);background:var(--inkfill);color:var(--onink);border-radius:7px;padding:3px 8px}
+.flg .pill{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:2px 9px}
+.flg h4{margin:0;font-size:15px;line-height:1.3}
+.flg .fam{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.flg .regla{margin:0;font-size:13.5px;color:var(--muted)}
+.flg .acc{margin:auto 0 0;font-size:13px;font-weight:600;color:var(--ink);padding-top:8px;border-top:1px solid var(--line)}
+.flg .acc::before{content:"→ ";color:var(--c)}
+.flg-vacio{grid-column:1/-1;text-align:center;color:var(--muted);padding:28px}
+@media (max-width:760px){.sevs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* antes vs ahora */
+.av{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+.av .lado{border-radius:12px;padding:20px 22px;min-width:0}
+.av .antes{background:var(--paper);border:1px solid var(--line)}
+.av .ahora{background:#15192C;color:#ECEFF1}
+.av .lado .k{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.av .antes .k{color:var(--muted)}.av .ahora .k{color:#EA6B58}
+.av .lado .big{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.av .ahora .big{color:#FFFFFF}
+.av .lado p{margin:.3em 0;font-size:14px}.av .ahora p{color:#C1CBD2}
+.av .lado ul{margin:10px 0 0;padding-left:18px;font-size:14px}.av .ahora li{color:#ECEFF1}
+.escala{margin:16px 0 4px}
+.escala .fila{display:grid;grid-template-columns:150px minmax(0,1fr) 110px;gap:12px;align-items:center;margin:8px 0;font-size:14px}
+.escala .pista{height:26px;border-radius:6px;background:var(--sage-t);overflow:hidden}
+.escala .pista div{height:100%;border-radius:6px}
+.escala .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.ecuacion{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:16px 0}
+.ecuacion .t{flex:1 1 180px;border-radius:10px;padding:12px 14px;border:1px solid var(--line);background:var(--paper);min-width:0}
+.ecuacion .t b{display:block;font-size:13px}.ecuacion .t span{font-size:13px;color:var(--muted)}
+.ecuacion .op{display:grid;place-items:center;font-size:22px;font-weight:800;color:var(--muted);padding:0 2px}
+.ecuacion .t.res{background:#15192C;border-color:#15192C;color:#ECEFF1}.ecuacion .t.res span{color:#AAB9C2}
+@media (max-width:620px){.av{grid-template-columns:minmax(0,1fr)}.escala .fila{grid-template-columns:90px minmax(0,1fr) 80px}.banda{padding:24px 18px}.banda .montes{opacity:.25}.banda .equipo{max-width:none}}
+/* lienzo tipo Lucidchart */
+figure.lienzo{margin:20px 0 6px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+figure.lienzo .cab{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);font-size:13px}
+figure.lienzo .cab b{font-weight:600}
+figure.lienzo .cab span{color:var(--muted)}
+.canvas{overflow-x:auto;background-color:var(--paper);background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:16px 16px;padding:14px}
+.canvas svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+svg .sh{stroke-width:1.6}
+svg .t1{font:700 14px var(--f-ui);fill:var(--ink)}
+svg .t2{font:12px var(--f-ui);fill:var(--muted)}
+svg .on .t1{fill:var(--onink)} svg .on .t2{fill:var(--onink);opacity:.82}
+svg .c-plain{fill:var(--paper);stroke:var(--ink)}
+svg .c-coral{fill:var(--coral-t);stroke:var(--coral)}
+svg .c-amber{fill:var(--amber-t);stroke:var(--amber)}
+svg .c-green{fill:var(--green-t);stroke:var(--green)}
+svg .c-sage{fill:var(--sage-t);stroke:var(--sage)}
+svg .c-ink{fill:var(--inkfill);stroke:var(--inkfill)}
+svg .lane{fill:var(--bg);stroke:var(--line);stroke-width:1}
+svg .lanehd{fill:var(--sage-t);stroke:var(--line);stroke-width:1}
+svg .lanet{font:800 13px var(--f-ui);fill:var(--ink)}
+svg .lanes{font:12px var(--f-ui);fill:var(--muted)}
+svg .ed{fill:none;stroke:var(--edge);stroke-width:1.6}
+svg .ed.d{stroke-dasharray:5 4}
+svg .ed.ln{stroke:var(--line);stroke-width:1.4}
+svg .elb{fill:var(--paper)}
+svg .elt{font:700 11.5px var(--f-ui);fill:var(--ink)}
+svg .ah{fill:var(--edge)}
+/* leyenda de formas */
+.leyenda{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted)}
+.leyenda li{display:flex;align-items:center;gap:8px}
+.leyenda svg{width:34px;height:22px}
+/* tablas */
+.tabla{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid}
+.ch-crit{color:var(--red);border-color:var(--red);background:var(--coral-t)}
+.ch-dato{color:var(--green);border-color:var(--green);background:var(--green-t)}
+.ch-rev{color:var(--amber);border-color:var(--amber);background:var(--amber-t)}
+.ch-info{color:var(--sage);border-color:var(--sage);background:var(--sage-t)}
+/* hoja de cálculo simulada */
+.hoja{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper);margin:16px 0}
+.hoja table{font-size:12.5px;min-width:900px}
+.hoja th,.hoja td{padding:6px 8px;border-right:1px solid var(--line);white-space:nowrap}
+.hoja .col{background:var(--bg);color:var(--muted);text-align:center;font-family:var(--f-mono);font-size:11px;text-transform:none;letter-spacing:0}
+.hoja .g-txt{background:var(--sage-t)} .hoja .g-real{background:var(--green-t)} .hoja .g-fc{background:var(--amber-t)} .hoja .g-ppto{background:var(--coral-t)}
+.hoja td.v{text-align:right;font-variant-numeric:tabular-nums}
+.bloques{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}
+.bloque{border-radius:8px;padding:10px 12px;font-size:13.5px;border:1px solid var(--line)}
+.bloque b{display:block;font-size:13px}
+.bloque.g-txt{background:var(--sage-t)} .bloque.g-real{background:var(--green-t)} .bloque.g-fc{background:var(--amber-t)} .bloque.g-ppto{background:var(--coral-t)}
+/* Formato Perú */
+.fp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.n1{background:var(--paper);border:1.6px solid var(--ink);border-radius:8px;overflow:hidden;min-width:0}
+.n1 h4{margin:0;padding:10px 12px;background:var(--inkfill);color:var(--onink);font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.n1 h4 span{opacity:.75;font-weight:400;font-variant-numeric:tabular-nums}
+.n1 ol{list-style:none;counter-reset:n;margin:0;padding:8px 12px 12px 12px;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.n1 li:not(.grp){display:flex;gap:6px}.n1 li:not(.grp)::before{counter-increment:n;content:counter(n) ".";color:var(--muted);min-width:20px;text-align:right;font-variant-numeric:tabular-nums}
+.n1 .grp{margin:6px 0 0;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--coral)}
+/* ejemplo de reparto */
+.reparto{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:18px 0}
+.barra{display:flex;height:42px;border-radius:6px;overflow:hidden;margin:6px 0 4px;border:1px solid var(--line)}
+.barra div{display:grid;place-items:center;font-size:12px;font-weight:600;color:#fff;min-width:0;overflow:hidden;white-space:nowrap}
+.u1{background:#D74028}.u2{background:#15192C}.u3{background:#2F71E5}.u4{background:#637D8D}.u5{background:#B23521}
+.barlab{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);gap:10px;flex-wrap:wrap}
+.formula{font-family:var(--f-mono);font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 16px;overflow-x:auto;white-space:normal;margin:14px 0}
+.dos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.tarjeta{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.tarjeta h4{margin:0 0 6px;font-size:15px}
+.tarjeta p,.tarjeta ul{margin:.3em 0;font-size:14px}
+.tarjeta ul{padding-left:18px}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin:8px 0}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--coral);font-size:18px;line-height:1}
+details[open] summary::after{content:"–"}
+details>div{padding:0 16px 14px}
+details>div p{margin:.3em 0}
+dl.glos{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:0;margin:16px 0;border:1px solid var(--line);border-radius:8px;background:var(--paper);overflow:hidden}
+dl.glos dt,dl.glos dd{margin:0;padding:9px 14px;border-bottom:1px solid var(--line);font-size:14px}
+dl.glos dt{font-weight:600;background:var(--bg)}
+footer{padding-block:30px;font-size:13px;color:var(--muted)}
+@media (max-width:980px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-inline:16px}
+  nav.toc{position:static;max-height:none;margin-bottom:12px}
+  .toc ol{flex-direction:row;flex-wrap:wrap}
+  .toc a{padding:4px 8px;background:var(--paper);border:1px solid var(--line)}
+  .kpis,.bloques{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fp{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .fp,.dos{grid-template-columns:minmax(0,1fr)}
+  dl.glos{grid-template-columns:minmax(0,1fr)} dl.glos dt{border-bottom:0}
+  .canvas svg{min-width:760px}
+  .aviso{flex-direction:column;gap:4px}
+}
+@media print{
+  nav.toc,.theme{display:none} .wrap{display:block;padding:0} section.etapa,figure.lienzo{break-inside:avoid}
+  body{background:#fff} details{border:0} details>div{display:block}
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<nav class="toc" aria-label="Contenido">
+  <span class="logo"><img src="data:image/jpeg;base64,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" alt="Credicorp Capital"></span>
+  <div class="brand">Ppto27 · Guía del proceso</div>
+  <ol id="toc">
+    <li><a href="#resumen"><span>★</span>Resumen ejecutivo</a></li>
+    <li><a href="#mapa"><span>0</span>Mapa general</a></li>
+    <li><a href="#e1"><span>1</span>Armado de plantillas</a></li>
+    <li><a href="#e2"><span>2</span>La plantilla por dentro</a></li>
+    <li><a href="#e3"><span>3</span>Envío y devolución</a></li>
+    <li><a href="#e4"><span>4</span>Carga y validación</a></li>
+    <li><a href="#flags"><span>◆</span>Catálogo de flags</a></li>
+    <li><a href="#e5"><span>5</span>Formato Perú</a></li>
+    <li><a href="#e6"><span>6</span>Gestión Dir/Ind</a></li>
+    <li><a href="#e7"><span>7</span>Controles de cuadre</a></li>
+    <li><a href="#conexion"><span>↔</span>Conexión con Power BI</a></li>
+    <li><a href="#e8"><span>8</span>Power BI</a></li>
+    <li><a href="#impacto"><span>9</span>Antes vs ahora</a></li>
+    <li><a href="#roles"><span>·</span>Quién hace qué</a></li>
+    <li><a href="#faq"><span>·</span>Preguntas frecuentes</a></li>
+    <li><a href="#glosario"><span>·</span>Glosario</a></li>
+    <li><a href="#autores"><span>·</span>Autores</a></li>
+  </ol>
+  <button class="theme" id="tema" type="button">Cambiar tema claro / oscuro</button>
+</nav>
+
+<main>
+<header class="hero" id="inicio">
+ <div class="banda">
+  <svg class="montes" viewBox="0 0 520 300" aria-hidden="true">
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D7DDE2"/><stop offset="1" stop-color="#637D8D"/></linearGradient>
+    <linearGradient id="mr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DE604D"/><stop offset="1" stop-color="#B23521"/></linearGradient></defs>
+    <polygon points="40,300 150,150 260,300" fill="#2F71E5" opacity=".9"/>
+    <polygon points="150,300 330,46 510,300" fill="url(#mg)"/>
+    <polygon points="230,300 300,206 370,300" fill="#3B4D56"/>
+    <polygon points="330,300 440,150 550,300" fill="url(#mr)"/>
+  </svg>
+  <span class="logo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxETERUREhIWFhUWGRUaGRgYFxYYGBsYGBgXIBkaFxsYHiggHR0lHxUXIjIhJSkrLi4uGCAzODMtNygtLisBCgoKDg0OGhAQGi0fICUtLS0rLS0tLS0tLS0tLS0tLS4rLS0tLSstLS0rLS0tLSstLS0tLS0tLS0uLS0tLS0tLf/AABEIAFYCTAMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABwECBAYIBQP/xABOEAABAwIDBAUFDQUFBgcAAAABAAIDBBEFEiEGBzFBEyJRYXEIFDKRsSM0NUJSYnJzdIGhsrMVM4KSwSWD0dLhFiRjk6LxNkNEU1TC8P/EABoBAQEBAQEBAQAAAAAAAAAAAAABAgMEBQb/xAAsEQEBAAIBAwIEBAcAAAAAAAAAAQIRMQMhQQQSBSIyUUJhgdETcZGhweHw/9oADAMBAAIRAxEAPwCcUREBERARFg41isVLBJUTOysjaSe09gA5knQDvQa/vK2xbh1KXNsZ5Ltibx1tq9w+S38TYLUtzO3rpv8AcKuQul6zopHcXi93McflC5I7vBRNtZtFLX1T6mXS+jGcmMHotHtJ5kleXBM5jmvY4te0hzXDQhwNwQusw7M7dkItT3cbYNxGlDzYTx2bKwfK5Ob813H1jktsXKzTQiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgoSudd7u23ns/m8Lv8AdoXHUcJJBoXHtA1A+89i3bfTtv0EZw+nd7rI33VwOrIz8UW+M7XwF+0KCF0wx8s2iIqLoj2tkNpJcPqm1MWtuq9l7B8Z4tPfpcHkQF1Pg+JxVMLKiF2aOQAtP9CORHAhceqRNz+3HmU/ms7rU0zuJOkch4O+i7QH7j2rGU2sdFIiLk0IiICIiAiL41dSyJjpJHBrGAuc48AALklB9iV49XtXh8TsslbTsPY6aMH8SoK2w25rcVqBTUgkbC42jhjJD5PnSWtyF8p0HE9qz6DcjXOYHSTQRE/Es55HiRYepb9s8ptOdBicE4zQzRyDtY9rh+BWWuZ9oNhcTws+ctJyNsengcRl10zjRwHrHapS3T7wTXNNNUWFTG0EOGglZzdbk4aXHeD2gS4+YbSMiIsqIiICIiAiIgIiIMQ4nBmydNHmvbLnbmve1rXve/JX4hWMhifNIbMja5zjx0aLlc21zR/tGDbX9oRfrsXSlXTMkY6ORocx7S1wPMEWIWrNI0LZHexTVtUKXoJIi+/RucWkOIF7ED0SQD2qQ1pGy+7ChoanzmMyveL5BI5pay9/Rs0Emxtckrd1LrwoiIoCIiAiIgIiICIiAiIgIiICIon3sbyX07nUNG60oHusvHo7j0Wcs9je/Lx4WTYkrEcZpoP388UX03tb7Sseh2moZjlhq4JD2MlY4/gVAmz27LEq8ecyERtfqJJ3OdI+/O2rrG/EkLNxfcxiETM8T4pyNcrbsf8Aw59CfvC17Z9026ERc+7vN4tRRTikrXPdBmyEyF2eA8OLtcoPFp4DUcLLoFpvqFmzS7VREUBERAREQEREGi7dby4MOmbTmF8shaHODSGhrSTbU8SbHQdi2nZ/GIqumjqor5JBcAixFiQQe8EELwNst3VHiMrZpTJHI0ZS6MtBc0cA7M0jS5146rY8GwuKlgjp4W5Y4xZovc95J5kkkk96t1oZqKKt7221bQVEMdM9jWvjc52ZgdqHWW/bI1756GmnkIL5YYnuIFhmc0E2HLimu2x66IigIiIPnPM1jS57g1o4kkADxJWL+2ab/wCRF/zGf4rW98A/seq8Iv1Y1zH0beweoLeOO0tdnIiLCi1rb/ayPDqV0psZXXbEwn0n9v0W8T/qvcxKvjgifPK4MjjaXOceAAXLe3G1MmIVTp33DBdsTPkR30/iPE/6LWOO0rxq2rfLI+WRxc97i5zjxLjxXwRUXZlVUuqXVCVFVJVpVCVaSoJ/3Kbc+cRigqH+7xD3NxOskYHDXi5v4jXkVKq4xoK6SCVk0TiySNwc1w5Ef05W7CuqdgNrY8SpGztsJG2bKy+rX21/hPEH/Bc8osbKi+NZVMijdJIcrWgknuCjrDdvn+dudL+4eQA3/wBsDg7v7/w4Lh1OrjhZL5eroek6nWxyywnH/aiS0Vsbw4BzSCCLgjgQexXLq8woy394s6OhZTtNunkAdb5DBmI8Ccvs5qTVC/lEA3o+z3b19T/Vax5Ss3cDgDWwSV72jPI50cZI4RstmI8X3B+gFLa0vc6R+x6e3/Fv49I+/wCN1uimXKx86iBr2OY9oc1wLXA6ggixBUT7N7pqqjr4quOqjyRyE5cr8xiNwWk3tfKfWpcRJbBqu8/EpqfDZpoJDHI3JZwtcXeAeIIUS4NvUro6SVrpDPVSSNbFmaDkZkN3BrGjMS6wDf8ACxk/fF8EVH93+dq0HyfsJjfNUVL2hzohG2O49Evzlzh39Vov49q1jrW6lNhzj7sRp5Kvz7oXPdnz52x2yOtmYLBovbkBeylXbPamHDqYzy9Yk5WRg2c9/YOwaXJ5Be8ue9/WKvkxAQA9WCJth8+S7ifVkHr7UnzU4fNu1W0GKSOFKZQ0HVsFo2M7nSusb+LtexVl2g2iwp7XVJlLHHhMRNG7u6QElp7sw8CpD2Y2ywOjpYqaOqYAxovZr+s8jrOOmpJuvptDtvglVTS08tUxzZGkWLX8eLSNNCCAQe5Xf5D3NhdrosSp+mYMj2kNljvcsda+h5tPI+PYVnbUY/DQ0z6ma+VvBotmc4+i1t+ZKg/cRiDo8SMN+rNE8HvdHZzT6s/rXs+UNiDjLS0wPVDZJSO1xIa0nwAf/Mp7fm0b7Nfq9usbxKcspTKwcoqfTKO18lgf4iWherhe0ePYU9r8QinlpnEB/SOEuUE8WytLsrvmuNj3cVIG57BY6fDIZA0dJUNEr3czm9AX7A22nitxrqSOaN8UjQ5j2lrmngQRYgpcpxo05nNWyXHmSxuzMfXwOae0Gdll0viMhbDI4GxDHkHsIabLl7DKDzfGYKc69FXQM77NqGWv32sunsW/cS/Vv/KUz8EQtui2yxCqxFkNRVPkjMUji0hgFwG2PVaDzU211ZHDG+aVwaxjS5zjwAHErnTcX8KxfUzexqkPf7ibo6GOBpt08oDu9rBmt4Zg31K5T5tDTtod6WI1s3Q4eHxMJIY2Nmed47TocvbZvDtWHVP2npB5xI6sa0akueJmgfOZd4aPECy3rcJgTGUbq0gGSZ72tPNsbDlsPFwcfUpRcARY6gpcpO2hHG67eQa9xpakNbUBt2ubo2UD0rDk4cbcx4KQMRro4InzSuDY42lznHgAP/3BaLh26algrW1sVRO1zJTI1g6PIASbs9G+Wzi3jey83ygMUdHSQU7Tbp5CXd7IgDb+Z7PUs6lvYanj+9DEq2focPa+JhJDGxtzzPHa42OXt0tbmVh1M+09I3p5HVjWjUlzhM0D5zbvDR4gLfdw2CsZROqy0dJM9wzcwyMkBo7rhx/7KTnC+h4LVykutCNt2O8zz53mtUGsqLXa5ujJQONh8Vw425jgt8x2ZzKWd7DZzYpCD2ENJBXN23dH+zcXkNP1BE9k0QHAAgOy/Rvmbbs0XROOyh9DM8cHQSEeBjJUynmEQXstvUrYemkqZ3T+5WijcGBplLm2JLWg2AzE+CvpKzaOomiqHefdG6SMnI2SOPIXi9mNtdtr62OnErB3LYVFUYmwStDmxRPlDTqC5pY1txzt0l/EBdKq5WS8ER5vqxyppKSF9NM6Jzpg0loaSW9G826wPMBabh28+t8wigiLqnEJXyjNlzOjYHWZ1GjrOI4aWAFz2LYvKE95U/2gfpSLG8n/AAVggmrXAF739Gw9jGDrW8XE3+iEmvbs8tPrxtPTt85ldWtb6RPSNkaOd3Rtc4NHi0ALd91+9B1VI2jrMomcPc5RYCQj4rm8A62otoddBzlQi+hXMe8jDhh+LSdD1Gh0U8YHxb2Ong9jrd1knzdjh0li9cIIJZzwjY9/jlaTb8Fzbu4wj9o4o0VHXHXnmvqHWIuD3F72i3Zop025mMmDVLxxfTud623/AKqLfJ8I8+n7fN9PDpGX9rVMeKVPYCIiwqMd4m611fVecwSxxFzAJA5rjmcCbO6vdYfct82aoZYKSCCZ4kfFG1heL9bKLA663sAvSRW0Q/vD3syRTPpKANLmEtfMet1+BbG3gSDpc315LW4qLaqVvTh1ZrqAZWRk/wB0XC3gWhSvX7L4NTzNrZYqeB7HZg9zhG3PrqWkhhNzfhx1VtXvMwiP/wBYx30A5/5QtS/aIjnZHepWwVLaXErubmDHuezo5YiebwAAQLi9wDbW5U6hctb0Mep62ukqaYODDGxuZwylzmg3dY6jTK3X5K6YwRxNNCTxMUZ/6AmU8kQZh28KtjxYtqKx/mrKicOaQy2RjpA0aNvyaOK+tfj20GKuMtFFPFTj0BG8RAjtMji3Oe3KbBahFhnnWMOpjwlrJWn6PSvLrfwgrqangaxjWMaGtaAGtAsABwACuWoOeMO3gYzh0/R1fSSAelFUCziO1klr/fdwU9bPY1DWU8dTCbseL68Wn4zXdhBuCtQ32YIybDZJ8o6Wnyva7nlLmiQX7MpJt2tC1ryecRdaqpieqDHI0dhddrvXlb6lLqzY+m+ramupKqCOmqHRNdEXODQw3Oci/WaeS3Siq6ubA2TROc6rko2ua4ZcxmdFcEX0vmPgoz8oT37TfUH9QqWd3vwVQ/ZoP02peIOdNtP2n0sf7T6TpMpydJ0d8l9bdHpa62nZY7SZKboen819xy26DL0N22tfrWy/esryhPflN9S/86lfd78FUP2eD8jVq35Ty9bFsSipoX1EzsscbS5x7h2dpPCygnFd5eLYhN0FAx8QN7MiAfKQOb3kWaOHC1u1TxiOHwzxmGeNskbrXY8BzTY3Gh7CAVrNIzBcJc/LJT0zpLZmmXr2HCzXOLgO4aLGOiooqm7UUbPOJH1WQauJkZOAPnNu+w77WHapA3V7xHYgXU9Q1rZ2NzAt0bI3gTlPAgketZeJ71cIa1zemMtwRlYx5Drjhe1te9RBuiktjVLl0DjOLd3QSm34D1LXM7wTRvf+B6rwi/VjXMq6a3v/AAPVeEX6sa5lVw4SuzERRrvj2480h80gdaombqRxjjOhd3OdYgfeeS5ybaaTvm2485lNDA73CJ3uhHCSVp4X5tafWfBRkqKl12k0yrdWkqhKoSgqSrSVQlWkqCpKtJVCVaSs7VUlbFsBtfJhtW2dtzG6zZmD4zO75zb3Hq5rWSVsOyWEdI7pnjqNPVHynD+g9q59TqTDHdduh0cutnMMeamXbnakVJbFC49CLOJ4Z3EAjvsPbfsC1FEXxM87nl7q/ZdDo49HpzDHw3bYLaroiKaZ3uZNmOPxCeR+afwUnrnpSNu/2rvlpJ3a8I3nn8w9/Z6vH2em6/4Mv0fI+J+g3vrdOfzn+f3b+o2374O6bD2zsFzTvDnW+Q4ZXH7iWnwBKklWTwte0scA5rgQQeBB4gr6Euq/Poi3BbRs6KTD3us8OdJEDzY4DO1vaQ4F38XcpgXO2227mrw+bzmjEj4GnMx0dzLF3OA1IHyhfTircN3zYlE3JIYZraZntIf95Y4A+pbuO+8TboSuq2QxvlkcGsY0uc46AAC5KibZTelXVuIR0rIIhG97rmz8zYW3JJ1sDlAHiQtDxLaXFsZeKcXkFweihZljHY55ufW51uxTBuv2AGHMdLMQ+pkADratY3jkYefK552HIKaknc5fffF8EVH93+dq1HydvRrPGH2SLbt8Z/sio/u/ztWoeTqQW1lu2H2SJPpPKZFzfvypnMxWR9v3kUT2/c0s9rPxXSC0fepsScRga6KwqIbll9A5p9JhPK9gQe0KY3VK8rD90eETRRzM6ctka1w925OAPZ3rIO5nCv8Aj/8AN/0Ub7Mbwq/Cb0dRDmYzhFLdj4/oO5t7tR2FZO0u9yrrIzS08Qi6TqnIXSSuB4tbYaX4aAnwWtZJ2Shszu3w+knZVU5lL2h2UmTM2zmkHS3YVH3lC05FVSyW6rontB72PBP4SBbJuZ2Hno2vqqm7HSNyshzHqtNiXPaNM5sNOQHfZbRvG2TGI0ZiaQJmHPE48A8Dge5wJB9fJTesl8Kbrq5suE0haR1Imxu7nRdUg/y3+9bSSuZNn9qcQwWaSFzLAnrwS3AJGgcxw4X+ULgrZJt4OKYwfMaOFkXSC0jmEvIYdCXPIAY3U8Bc8kuFNtVjrmz48ydurZK+Eg8iPOGWI7iBddL4t+4l+rf+UrmSlw5tNjcNK12YRVtOwE2BNpo9bBdN4t+4l+rk/KVc/BHPG4v4Vi+pm9jVvPlC0rjTU0oGjJXNPdmYbfi1aNuKP9rR/Uzexqn3afAoq2lkpZfReNCOLXA3a4d4IBTK6yJw1DcVXtkwsRA9aGSRrh9J2dp8LPt/CVIi5lZJiWAVhuAL6G4JgmYL2sdNefJw56cfexTffVSRGOGCOF7hbpM5eRfmxpAF+wm/gUuFt3DaXmbaYcZ/NhVxGbP0eQHrZ82XL430UfeURSOMVHMBox8rD3GRrCP0isHc9sHP5w3EathY1t3RNfcPc9wPujgdQACbX4k35KVtq8BjrqWSlk0Dx1Xc2vGrXDwNlO0py1XcbWtfhTYwetFJK1w7Mzi8X8Q9SCuZ6epxPAKp12gB2hzAmGZo4FruRFz3i+oXuYrvvqpIiyGCKF7hbpM5eR9EEAX7zfwVuFt3Dbwt8VUJ8XnEfWLRHELc3BuoHfmeQugMWgyYdLGfiU72/wAsZH9FEu6fd9PJO3EKxhaxpzxtffPJJe4e4HUNBuddSbHxmHaX3nUfUy/kKmV4hEFbgPhN32WX9SBdDrnjyf3D9pu+yy/qQLodM+ScIs8oT3lT/aB+lIvruBr2voJIAetDK4kc8snWafAkOH8JXy8oT3lT/aB+lIo/2TpsQpKVuL0JzNzSMnjy5hkYRYlo1LeNyCC23YSrJvE8uk1zXvorBPi0rGa9GyKHxdYuPqMuXxBXrYnvwq5IiyKGGF5FukDy8jva0gC/jfwKs3V7Cz1VSyuqWuEDHdIC+4dNIHXaQDqW31J52A1BKSe3vTlN37MD6LzV+maHoz3XZlK502CxU4XirTUdQNL4Ju4Ei7vAOa13hqunlF+9bdu6rd55SAdOABIwmwkAGhB4B40GuhHgpjfFKk5jwQCCCCLgjUEHgQrlzJg23eK4YfNi4hrNOhqGHq/R1DgOyxss3Fd72J1DeijdHFm09xaTIe4FxPHuF+9PZTbeN4m9SSjqzTUzIpAxo6QuubPN+qMp5C1/Fb9heJy+YMqqlgbJ0PSvYARlOXNlsdbgaeKiLdxuunllZV17SyNpziJ9+kkde4MgPotvrrqe5ThVQB7HRu9FzS0+BFj7VMtcQjmbCKSrx3EbSy2Lszy513CKO/oxt4cwANL8SpWw/cvhrAOlM0x73lg9UdvaorArcAxDMWDTM1pcD0c0RI4O7bAd7Ty7dxqN+Uj25IKIdM7Rt3l4zHhZrRd2vLmt3fhGnb3sIpaSu83pWBjGwRktBc7rkyElxcSScuTieFl0bgPvWD6qL8gXL23dDVRTB9a69TURiZ40u3MXNa020uGsGg4cOS6hwH3rB9VF+QKZ8RY5twiubBjomebNbWy3PIB0sjbnuGa66hXKseFCrxd9KXZemqalubjbrykfiFuUO8vFMLPmVdA2R8ejXPcWOLRoCHAESN00da/bqrlN8ESLvfrmxYRU34yBsbR2l7mg+puY/ctF8nimPS1cvxQ2Jn3kvPsH4rTsb2hxDG6hkbWZrehDEOoy/FzifzOsOy19Z43e7LDDqJsBIMjjnlcOBkIF7X+KAAB4KX5Zo8os8oT37TfUH9QqWd3vwVQ/ZoP02qJfKFcBW031B/UKlrd78FUP2aD9Nql+mE5RP5Qnvym+pf8AnUr7vfgqh+zwfkatH37bLzzthrIGGToWvbI1oJcGkgh4A4gWN/Ed9tN2M3r1NLHBSObE+Jj2NzOvnbEXDMNDY2BNuyw4q63j2PKUd8O0stFQjoCWyTPEYeOLBlc5zh32bYeN+SjHdzu2OJRuqp53MjzuaMozSPcLZnFzr2GtuZOvBSrvW2Xkr6HJDYyxPEjBe2awcHNv2kONu8BRDsNvFnwpr6WSDOzMXZHXjkY82zcRwNhoR7Ux47FSpSbpMIi6z4nyW1Jklktp2hpAI7iFEO6m37bpbcM89vDoJrLbZ94FfjDhQUMHQtk0lluXlsZ9K7gLNFvvPAWWpbqGhuOUrAb5X1A9UEw/onfV2iad7/wPVeEX6sa5lXTW+A/2PVeEX6sa5jzjtCuHBXWO2m00WH0rqiTU+jGzm954NHdzJ5AFcsYriUtRM+eZ2aSQlzj39gHIDgB3Lfd69Pi1VVukko52wR3bCGtzjLfV56Mu6zuJ7BYKNXusbHQjiDoR4gpjNFVJVpKoSqEqipKtJVCVaSpsVJVpKtJVpKztVSVaSrSVdDE57gxou4mwHes2rJtm4LhrqiUMGjeLj2D/ABKkmCFrGhjRZrQAB3BYWCYY2niDBq46uPa7/AL0F8n1HW/iZanEfrPh3o/4GG8vqvP5fkIiLzPoiqCqJdBKuwu1XnDegmPuzRofltHP6Q5+tbgoDw+KZzg6Bry5puCwEkEd4U07O1k8sINREY5BoQdAfnAcr9i+n6brXOar8x8T9Hj0svfhrV8fb/T01iTYXTvOZ8ETieJcxpPrIWWi9b5L5wQMYMrGtaOxoAHqC+iIgo5oOhF1RrAOAA8ArkQEREHwqqOKQWkjY8djmh3tCtpMOhi/dRRs+ixrfYFkogIiIPhU0ccgAkjY8DhmaHW8LhVpqWOMZY2NYOxrQ0eoL7Igs6Jt75RfwCvREFjY2jgAPuCvREFk0TXDK5ocDxBAI9RWNT4VTxuzRwRNd2tY0H1gLMRAREQWTRNcMrmhwPEEAj1FYtPhFMx2ZkETXdrY2A+sBZqICEIiC1sbRwAHgFciIIs8oT3lT/aB+lIs7cP8F/303tC9/b3Y9mJwxwvldEGPz3a0OJOVwtr9JfbYjZhuHU3mzZDIM7nZnANPW5WC1v5dJ5eocKp82boIs1736Nl79t7LMRFlRERB8amkjkFpI2vA5OaHe1WU2Hwxm8cUbD2tY1p/ALJRAREQfOeBjxle1rm9jgCPUVj0mF08RvFDGw9rWNafWAsxEFro2niAfEK4IiDmfZb/AMRM+2z/AJpV0lU0kcgtJG14HJzQ4fio/wAM3URQ4gK8VTy4TPlyFjbXeXEi9726xUjLWV2kfGmpI4xaNjWA8mtDR+C+yIsqtdGDxAPiFUBVRAWO6hiLs5iYXfKytvfxtdZCICxKzDIJdZYY3n5zGu9oWWiD5U1NHGMsbGsHY1oaPUFcImjUNF/AK9EFHNBFiLhfPzdnyG+oL6ogLFrMOglFpYY5B2PY135giINcxDdrhEvpUcbSebM0Z/6CFrlZuOw11zHLUx9wexzR/Own8URXY8ap3Bs/8uud/FE3+jl5dTuGqQLtrYj4xvHsJRE2PEqtzmIMuempiPpSg+ro14NXsFVMNi+H7nP/AMiqigxv9i6j5cX8z/8AKtr2O2GlYDK50ZebgausBz+LxPsVEXLrd8dPX6K66u/t3bjBsdUv4Oi+9z/8izoN31S7jLEPDOf/AKhEXnw9NheX0Or8S6+N1LP6M6Ldo/41Q37mH+pWZDu0h+PUSH6LWN9uZEXaem6U8PHl8T9Tfxf2n7PSptgaFvFr3/SefY2wXrUuz1JH6FPGO/KCfWURdJ08JxI8+fqetn9Wdv6vSa0DQCyqiLbgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIP/Z" alt="Credicorp Capital"></span>
+  <div class="eyebrow">Planeamiento · Credicorp Capital · Presupuesto 2027</div>
+  <h1>Cómo se arma, se consolida y se reparte el Ppto27</h1>
+  <p class="lead">Planeamiento arma una plantilla Excel por cada unidad, área o rubro con el gasto Real 2026. Cada área la devuelve con su presupuesto 2027. Databricks las consolida, valida cada celda, reparte los indirectos con la metodología nueva y publica el resultado en Power BI por país, mes y Formato Perú.</p>
+  <div class="kpis">
+    <div class="kpi top"><div class="n">36 h → 5 min</div><div class="l">consolidar las 184 plantillas: antes ~36 horas de SQL a mano, ahora una corrida de ~5 minutos</div></div>
+    <div class="kpi"><div class="n">184</div><div class="l">plantillas en 5 rubros y 6 países</div></div>
+    <div class="kpi"><div class="n">63</div><div class="l">controles automáticos: cada error con su celda exacta</div></div>
+    <div class="kpi"><div class="n">100 = 100</div><div class="l">lo que suman las plantillas es lo que suma el BI</div></div>
+  </div>
+  <div class="equipo" aria-label="Equipo del proyecto">
+    <div class="tit">Proyecto desarrollado por</div>
+    <div class="persona"><span class="ini">CV</span><b>Christian Pablo Vila Ramos</b></div>
+    <div class="persona"><span class="ini">MC</span><b>Matias Fernando Castillo Quincho</b></div>
+    <div class="persona"><span class="ini">JM</span><b>Jean Pierre Mendoza Cueva</b></div>
+    <div class="persona"><span class="ini">LD</span><b>Luis Alonso Delgado Quiroz</b></div>
+    <div class="persona"><span class="ini">YP</span><b>Yacomo Rodrigo Poma Rojas</b></div>
+  </div>
+ </div>
+</header>
+
+<section class="etapa" id="resumen">
+  <div class="etq"><b>★</b>Resumen ejecutivo</div>
+  <h2>Qué resuelve el proyecto, en cuatro puntos</h2>
+  <div class="ejec">
+    <div class="c"><div class="n">Dato confiable</div><h4>Una sola fuente y cuadre exacto</h4><p>El Real 2026 sale de la TD Regional con filtros oficiales y cada plantilla cuadra contra ella a nivel país × vehículo × CeCo × cuenta × mes antes de publicarse. En la consolidación rige el 100 = 100: lo que suman las plantillas es lo que suma el BI.</p></div>
+    <div class="c"><div class="n">Control</div><h4>Validación automática, celda por celda</h4><p>63 reglas revisan cada archivo, línea y monto. Cada hallazgo queda trazado con archivo, fila y celda exacta; las líneas con error pasan a cuarentena sin salir del cuadre, y 25 controles de integridad corren en cada carga.</p></div>
+    <div class="c"><div class="n">Gestión</div><h4>Metodología Dir/Ind nueva y trazable</h4><p>El peso de cada UdN es su gasto directo (imputación + soporte directo) por país y mes. La bolsa de indirectos, formada por el sobrante del soporte y las áreas 100 % indirectas, se asigna con ese peso y se verifica al céntimo.</p></div>
+    <div class="c"><div class="n">Eficiencia</div><h4>De 36 horas a 5 minutos</h4><p>En el Ppto 2026 cada plantilla se subía con un ejecutable SQL: unos 10 minutos cada una y 45 las de TI. Hoy una corrida en Databricks recarga, valida, consolida y reparte las 184 plantillas en minutos, y el equipo dedica ese tiempo al análisis.</p></div>
+  </div>
+</section>
+
+<section class="etapa" id="mapa">
+  <div class="etq"><b>0</b>Vista general</div>
+  <h2>El proceso en una página</h2>
+  <p>Cuatro actores, un solo flujo. Si un paso no cuadra, el proceso vuelve al anterior; nada pasa al BI sin cuadrar.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Mapa general del proceso</b><span>4 carriles · quién hace cada paso</span></div>
+    <div class="canvas"><svg id="d-mapa" role="img" aria-label="Mapa general del proceso Ppto27"></svg></div>
+    <figcaption>Se lee de arriba hacia abajo. Planeamiento arma y publica las plantillas, las áreas las llenan, Databricks las valida y reparte, y Power BI muestra el resultado.</figcaption>
+  </figure>
+  <ul class="leyenda" aria-label="Leyenda de formas">
+    <li><svg viewBox="0 0 34 22"><rect x="2" y="3" width="30" height="16" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/></svg>Proceso</li>
+    <li><svg viewBox="0 0 34 22"><polygon points="17,1 33,11 17,21 1,11" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/></svg>Decisión</li>
+    <li><svg viewBox="0 0 34 22"><path d="M4 5 a13 3 0 0 1 26 0 v12 a13 3 0 0 1 -26 0z M4 5 a13 3 0 0 0 26 0" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/></svg>Base de datos</li>
+    <li><svg viewBox="0 0 34 22"><path d="M3 2 h28 v15 q-7 -4 -14 0 t-14 0z" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/></svg>Archivo Excel</li>
+    <li><svg viewBox="0 0 34 22"><rect x="2" y="4" width="30" height="14" rx="7" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/></svg>Inicio o resultado</li>
+    <li><svg viewBox="0 0 34 22"><path d="M3 3 h22 l6 6 v10 h-28z" fill="var(--amber-t)" stroke="var(--amber)" stroke-width="1.4"/></svg>Nota</li>
+  </ul>
+  <p class="aviso"><strong>Importante</strong><span>Las plantillas devueltas que hay hoy en el sistema son supuestos de prueba, no presupuestos oficiales de las áreas. Los ejemplos numéricos de esta guía son ilustrativos.</span></p>
+</section>
+
+<!-- ============ 1 ============ -->
+<section class="etapa" id="e1">
+  <div class="etq"><b>1</b>Planeamiento</div>
+  <h2>Armado de las plantillas con el Real 2026</h2>
+  <p>Cada plantilla llega al área con su gasto real de enero a agosto de 2026 ya cargado. Así el área presupuesta sobre lo que de verdad gastó. Ese Real sale de una sola fuente oficial, la <b>TD Regional</b>, con filtros fijos. Hay tres excepciones: OyS, CS Administrativo y Consultorías y Honorarios salen de las bases consolidadas de esos rubros.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 1 · De la TD Regional a la plantilla</b><span>fuentes → filtros → reglas → cuadre</span></div>
+    <div class="canvas"><svg id="d-armado" role="img" aria-label="Armado de plantillas"></svg></div>
+    <figcaption>Una plantilla solo se publica cuando cuadra con la TD a nivel país × vehículo × CeCo × cuenta × mes. Un cuadre por país no basta: un error entre CeCos se cancelaría en el total.</figcaption>
+  </figure>
+  <div class="dos">
+    <div class="tarjeta"><h4>Filtros oficiales de la TD</h4><ul>
+      <li>Solo <b>Real 2026</b>, enero a agosto.</li>
+      <li><b>Vista 1 y 3</b>.</li>
+      <li>Sin <b>INTERCOM</b> (incluye INTERCOM_BCP) ni compañías de eliminación <b>ELIM_*</b>.</li>
+      <li><b>Con ajustes</b>. OyS va sin ajustes; en Chile el ajuste CENTRALIZADO se agrupa en el CeCo 309.</li>
+      <li><b>Sin IPC</b>: Invertir para Crecer queda fuera de todas las plantillas y validaciones.</li></ul></div>
+    <div class="tarjeta"><h4>Reglas de cada línea</h4><ul>
+      <li>Cada línea tiene un <b>CeCo real con número</b> (por ejemplo, "537 - Desarrollo de Negocios").</li>
+      <li><b>Nunca "Varios"</b>: ni CeCo, ni proveedor, ni cliente, ni banco.</li>
+      <li>El mismo gasto no se parte en variantes del nombre del proveedor (tildes dañadas, "S.A." vs "SA").</li>
+      <li>En plantillas de UdN, cada cuenta contable va en su propia fila.</li>
+      <li>Los montos en cero quedan como celda vacía.</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="etapa" id="e2">
+  <div class="etq"><b>2</b>La plantilla</div>
+  <h2>La plantilla por dentro</h2>
+  <p>Las 184 plantillas tienen la misma tabla de 41 columnas (A a AO) en la hoja <b>Ppto27</b>. Por eso se pueden leer todas de forma automática. El área completa solo el bloque coral: el Ppto 2027 de enero a diciembre.</p>
+  <div class="hoja">
+    <table>
+      <thead>
+        <tr><th class="col">A</th><th class="col">B</th><th class="col">C</th><th class="col">E</th><th class="col">F–G</th><th class="col">J</th><th class="col">K</th><th class="col">M</th><th class="col">N … U</th><th class="col">V … Y</th><th class="col">Z</th><th class="col">AA … AL</th><th class="col">AM</th><th class="col">AN–AO</th></tr>
+        <tr><th class="g-txt">País</th><th class="g-txt">Vehículo</th><th class="g-txt">CeCo</th><th class="g-txt">Cuenta contable</th><th class="g-txt">Nivel 1 / Nivel 2</th><th class="g-txt">Proveedor</th><th class="g-txt">Glosa</th><th class="g-txt">Moneda</th><th class="g-real">Real Ene–Ago 26</th><th class="g-fc">Forecast Set–Dic 26</th><th class="g-fc">F26</th><th class="g-ppto">Ppto Ene–Dic 27</th><th class="g-ppto">P27</th><th class="g-ppto">Var. P27 vs F26</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Perú</td><td>MDK</td><td>537 - Desarrollo de Negocios</td><td>Servicios de asesoría</td><td>Gastos Administrativos / Consultorías y Honorarios</td><td>(proveedor homologado)</td><td>Asesoría regulatoria</td><td>PEN</td><td class="v">-12,400 …</td><td class="v">-3,100 …</td><td class="v">-111,600</td><td class="v">-9,800 …</td><td class="v">-117,600</td><td class="v">+5.4 %</td></tr>
+        <tr><td>Perú</td><td>MDK</td><td>537 - Desarrollo de Negocios</td><td>Licencias de software</td><td>Gastos de TI / Licencias</td><td>(proveedor homologado)</td><td>Licencia anual</td><td>PEN</td><td class="v">-2,050 …</td><td class="v">-2,050 …</td><td class="v">-24,600</td><td class="v">-2,150 …</td><td class="v">-25,800</td><td class="v">+4.9 %</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px">Filas de ejemplo con montos inventados, solo para mostrar la forma.</p>
+  <div class="bloques">
+    <div class="bloque g-txt"><b>A–M · Descripción</b>Qué se gasta, dónde y con quién. La llena Planeamiento; el área puede agregar líneas.</div>
+    <div class="bloque g-real"><b>N–U · Real 2026</b>Gasto real de la TD. No se modifica: si cambia, se marca.</div>
+    <div class="bloque g-fc"><b>V–Z · Forecast y F26</b>Proyección del cierre 2026 para comparar.</div>
+    <div class="bloque g-ppto"><b>AA–AO · Ppto 2027</b>Lo que presupuesta el área, mes a mes y <b>en negativo</b> (es gasto).</div>
+  </div>
+  <p>Además hay una hoja oculta, <b>Tablas</b>, con la lista de proveedores homologados que alimenta el desplegable de la columna Proveedor. Cada plantilla trae en su cabecera el tipo de cambio 2027, que se usa para pasar todo a soles (PEN).</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="etapa" id="e3">
+  <div class="etq"><b>3</b>SharePoint</div>
+  <h2>Envío a las áreas y devolución</h2>
+  <p>Las plantillas se publican en SharePoint en la carpeta <b>Plantillas 2027</b>, ordenadas por rubro. Cada responsable ve solo su carpeta (matriz de accesos). El área descarga su plantilla, completa el Ppto 2027 y la vuelve a subir en el mismo lugar.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 2 · Carpetas de SharePoint</b><span>184 plantillas en 5 rubros</span></div>
+    <div class="canvas"><svg id="d-carpetas" role="img" aria-label="Árbol de carpetas"></svg></div>
+    <figcaption>La carpeta y el nombre del archivo identifican la plantilla. Por eso el área no debe mover ni renombrar su archivo; si lo hace, el sistema intenta reconocerlo igual (ver etapa 4).</figcaption>
+  </figure>
+  <div class="tabla"><table>
+    <thead><tr><th>Tipo de plantilla</th><th>Quién la llena</th><th>Ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td><b>UdN</b> (unidad de negocio)</td><td>La unidad, con todos sus gastos administrativos</td><td>MDK Perú, WM Chile, NNFF Colombia</td></tr>
+      <tr><td><b>Staff</b></td><td>Cada área de soporte o corporativa</td><td>Legal, Operaciones, Riesgos, Finanzas, Cumplimiento</td></tr>
+      <tr><td><b>Rubro</b></td><td>El dueño del rubro para todo el país o la región</td><td>Personal, Tecnología, D&amp;A, Impuestos, Marketing, Dietas</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="etapa" id="e4">
+  <div class="etq"><b>4</b>Consolidación</div>
+  <h2>Carga y validación automática</h2>
+  <p>Las plantillas devueltas se suben a Databricks tal como llegan: las carpetas de SharePoint completas, una carpeta incompleta o archivos sueltos. El sistema reconoce cada archivo, guarda el historial de versiones y revisa celda por celda. Cada error queda marcado con su <b>archivo, fila y celda exacta</b>, listo para mostrárselo al área. <b>Nada se pierde</b>: lo que falla un control se aparta, pero sigue contando en el cuadre.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Arquitectura · Databricks en capas (medallion)</b><span>Unity Catalog · Delta Lake · PySpark</span></div>
+    <div class="canvas"><svg id="d-arq" role="img" aria-label="Arquitectura del pipeline en Databricks"></svg></div>
+    <figcaption>Cada capa es una tabla Delta con historial de versiones: se puede auditar o volver a cualquier punto. Power BI lee solo la capa Gold, que ya está validada y cuadrada.</figcaption>
+  </figure>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 3 · Qué pasa con cada archivo y cada línea</b><span>reconocer → versionar → validar</span></div>
+    <div class="canvas"><svg id="d-carga" role="img" aria-label="Ciclo de un archivo en la consolidación"></svg></div>
+    <figcaption>Arriba, el archivo: se reconoce y se guarda como versión nueva solo si cambió. Abajo, cada línea × mes: según su peor control queda OK, OK con alerta o en cuarentena.</figcaption>
+  </figure>
+  <h3>Situaciones reales y cómo se resuelven</h3>
+  <div class="tabla"><table>
+    <thead><tr><th>Situación</th><th>Qué hace el sistema</th></tr></thead>
+    <tbody>
+      <tr><td>Llega una carpeta incompleta</td><td>Entra lo que vino. Las que faltan conservan su última versión o figuran como <b>pendiente de entrega</b>.</td></tr>
+      <tr><td>Archivos sueltos o renombrados ("(2)", "v3")</td><td>Se reconocen por nombre y país contra el maestro de las 184 plantillas.</td></tr>
+      <tr><td>Un área reenvía una corrección</td><td>Es una versión nueva: reemplaza a la anterior, que queda en el historial.</td></tr>
+      <tr><td>Se sube dos veces el mismo archivo</td><td>Tiene el mismo contenido (hash), así que no se vuelve a leer.</td></tr>
+      <tr><td>Dos versiones de la misma plantilla en una subida</td><td>Gana la de fecha más reciente y se marca con el flag <b>F17</b>.</td></tr>
+      <tr><td>Un archivo que no es de ninguna plantilla</td><td>Flag <b>F14</b>: queda en "a revisar" y se asigna sin volver a subirlo.</td></tr>
+    </tbody></table></div>
+  <h3>Severidad de los controles</h3>
+  <div class="tabla"><table>
+    <thead><tr><th>Severidad</th><th>Qué pasa</th><th>Ejemplos</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip ch-crit">Bloqueante</span></td><td>Se rechaza el archivo completo</td><td>Falta la hoja Ppto27, columnas movidas, archivo duplicado</td></tr>
+      <tr><td><span class="chip ch-crit">Error</span></td><td>La línea va a cuarentena</td><td>Gasto 2027 en positivo, texto en un monto, CeCo sin número, Real 2026 modificado</td></tr>
+      <tr><td><span class="chip ch-rev">Alerta</span></td><td>Entra al BI y se revisa</td><td>Variación mayor a ±50 % sin comentario, proveedor nuevo, tildes dañadas</td></tr>
+      <tr><td><span class="chip ch-info">Info</span></td><td>Se corrige solo</td><td>Espacios de más, ceros escritos, fórmulas simples</td></tr>
+    </tbody></table></div>
+  <p>Los 63 flags (ver el <a href="#flags">catálogo completo</a>) se agrupan en cinco familias: <b>F</b> archivo, <b>L</b> línea (país, CeCo, vehículo, niveles, proveedor), <b>C</b> cambios contra la versión enviada, <b>M</b> montos (signo, texto, escala) y <b>T</b> texto (caracteres dañados o invisibles).</p>
+</section>
+
+<!-- ============ catálogo ============ -->
+<section class="etapa" id="flags">
+  <div class="etq"><b>◆</b>Catálogo</div>
+  <h2>Catálogo de controles: las 63 reglas de validación</h2>
+  <p class="lead">Cada plantilla pasa por estas reglas, celda por celda. Cuando una se cumple, el sistema registra el hallazgo con su archivo, fila y celda exacta, y aplica la acción según su severidad.</p>
+  <div class="sevs" id="sevs"></div>
+  <div class="flg-bar">
+    <input type="search" id="flg-q" placeholder="Buscar: positivo, proveedor, CeCo, M01…" aria-label="Buscar en el catálogo">
+    <div class="seg" id="flg-fam" role="group" aria-label="Familia"></div>
+    <div class="seg" id="flg-sev" role="group" aria-label="Severidad"></div>
+  </div>
+  <div class="flg-grid" id="flg" aria-live="polite"></div>
+  <p class="muted" style="font-size:13px" id="flg-n"></p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="etapa" id="e5">
+  <div class="etq"><b>5</b>Vista contable</div>
+  <h2>Formato Perú: cómo se ordena el gasto</h2>
+  <p>La vista contable muestra el presupuesto tal cual lo cargaron las áreas, ordenado como el <b>Formato Perú</b> del cierre mensual. Tiene 4 grandes rubros (Nivel 1) y 35 líneas de detalle (Nivel 2), siempre en este orden. Cada línea de la plantilla se ubica aquí por su Nivel 1 y Nivel 2. Si no encaja, se marca como "sin mapeo" (control A1).</p>
+  <div class="fp" id="fp"></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="etapa" id="e6">
+  <div class="etq"><b>6</b>Vista de gestión</div>
+  <h2>Gestión Dir/Ind: la metodología nueva de indirectos</h2>
+  <p class="lead">La vista de gestión responde <b>¿cuánto le cuesta cada unidad de negocio (UdN)?</b> Cada gasto se clasifica en directo o indirecto, y lo indirecto se reparte con el <b>peso del gasto directo</b> de cada UdN, por país y por mes.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Componente</th><th>Qué es</th><th>Cómo llega a la UdN</th><th>Tipo</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Imputación directa</b></td><td>Gasto de los CeCos de negocio: 2xx (Tesorería), 5xx, 6xx, 8xx, 9xx y Tyba (113, 346, 810, 811, 818)</td><td>100 % a su UdN</td><td><span class="chip ch-dato">Directo</span></td></tr>
+      <tr><td><b>2 · Soporte directo</b></td><td>Áreas que atienden directamente a las UdN: Riesgos, Operaciones, COO, Canales Digitales, Legal, Contabilidad, Marketing, PMO, Procesos, Research y GenAI</td><td>Con el % de su driver. La parte que el driver no asigna a una UdN (fila STAFF) va a la bolsa</td><td><span class="chip ch-dato">Directo</span></td></tr>
+      <tr><td><b>3 · Indirecto asignado</b></td><td>La bolsa: lo que <b>sobró del soporte directo</b> + el gasto de las áreas <b>100 % indirectas</b> (Finanzas, Cumplimiento, Auditoría, Gerencia General, Bolsa CEO, CENTRALIZADO, CeCos sin driver)</td><td>Se reparte con el <b>peso</b> de cada UdN: su directo (1 + 2) ÷ el directo total del país, en ese mes</td><td><span class="chip ch-rev">Indirecto</span></td></tr>
+    </tbody></table></div>
+
+  <h3>La regla en tres pasos</h3>
+  <div class="ecuacion" aria-label="Cómo se forma el directo">
+    <div class="t"><b>Imputación directa</b><span>gasto propio de la UdN</span></div><div class="op">+</div>
+    <div class="t"><b>Soporte directo</b><span>lo que los drivers le asignan</span></div><div class="op">=</div>
+    <div class="t res"><b>Directo de la UdN</b><span>define su peso en el país</span></div>
+  </div>
+  <div class="ecuacion" aria-label="Cómo se forma la bolsa">
+    <div class="t"><b>Sobrante del soporte directo</b><span>la fila STAFF de los drivers</span></div><div class="op">+</div>
+    <div class="t"><b>Áreas 100 % indirectas</b><span>Finanzas, Gerencia General, Bolsa CEO…</span></div><div class="op">=</div>
+    <div class="t res"><b>Bolsa de indirectos</b><span>por país y mes</span></div>
+  </div>
+  <div class="formula">Indirecto de la UdN (país, mes) = Bolsa (país, mes) × Directo de la UdN (país, mes) ÷ Directo total del país (país, mes)</div>
+
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 4 · Cómo se clasifica cada línea</b><span>se aplica a cada país × CeCo × vehículo × mes</span></div>
+    <div class="canvas"><svg id="d-dirind" role="img" aria-label="Árbol de decisión Directo e Indirecto"></svg></div>
+    <figcaption>Primero se busca el driver del CeCo con el vehículo exacto y, si no existe, el driver de "todos los vehículos". Panamá escribe sus CeCos como 211xxx; se leen como xxx.</figcaption>
+  </figure>
+
+  <h3>Ejemplo completo: Perú, enero 2027</h3>
+  <p>Montos ilustrativos, en miles de PEN. Las UdN suman -1,000 de directo (imputación + soporte directo). La bolsa es -400: -35 que sobraron del soporte directo y -365 de las áreas 100 % indirectas. Cada UdN recibe de la bolsa exactamente su peso.</p>
+  <div class="reparto" id="reparto"></div>
+  <div class="dos">
+    <div class="tarjeta"><h4>Soporte directo con drivers</h4><p>Operaciones Perú gasta -100 y su driver dice MDK 20 %, WM 25 %, AM 20 %, NNFF 15 %, Tesorería 10 % y STAFF 10 %. MDK recibe -20 como soporte directo, que suma a su directo y a su peso. Los -10 de STAFF van a la bolsa y se reparten con el peso de todas las UdN.</p></div>
+    <div class="tarjeta"><h4>Por qué mes a mes</h4><p>El peso de cada UdN cambia cada mes. Si en marzo WM concentra más gasto directo, ese mes recibe más indirecto. Se calcula por país y por mes, nunca con un promedio anual. El resultado no es volátil: con los mismos datos da siempre lo mismo, y el peso de una UdN solo se mueve si se mueve su gasto directo.</p></div>
+  </div>
+  <p>Al final, para cada país y mes: <b>Directo + Indirecto = gasto contable</b>. El reparto mueve el gasto entre UdN, pero no crea ni borra ni un sol. El notebook de la demo lo comprueba con los montos reales, mes a mes y UdN por UdN.</p>
+</section>
+
+<!-- ============ 7 ============ -->
+<section class="etapa" id="e7">
+  <div class="etq"><b>7</b>Control</div>
+  <h2>Controles de cuadre: cómo sabemos que está bien</h2>
+  <p>Después de cada carga corre un validador independiente. Recalcula todo por su cuenta y lo compara con lo que se publicó. Hay tres tipos de resultado: <span class="chip ch-crit">Crítico</span> tiene que dar OK sí o sí; <span class="chip ch-rev">Revisar</span> pide mirar casos puntuales; <span class="chip ch-dato">Dato</span> es informativo.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Control</th><th>Qué prueba, en palabras simples</th><th>Tipo</th></tr></thead>
+    <tbody id="controles"></tbody></table></div>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 5 · El cuadre en cadena</b><span>cada eslabón debe dar diferencia 0</span></div>
+    <div class="canvas"><svg id="d-cuadre" role="img" aria-label="Cadena de cuadre"></svg></div>
+    <figcaption>Si un eslabón no da cero, el problema está entre ese paso y el anterior. Eso acota dónde buscar.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ conexión ============ -->
+<section class="etapa" id="conexion">
+  <div class="etq"><b>↔</b>Conexión</div>
+  <h2>De Databricks a Power BI: nuestra guía de conexión</h2>
+  <p class="lead">Power BI lee directamente las tablas finales de Databricks, ya validadas y cuadradas. No hay exportaciones a Excel ni archivos intermedios: cada vez que el reporte se abre o se actualiza, consulta la versión vigente del presupuesto.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama · Del dato validado al reporte</b><span>conexión en vivo (DirectQuery)</span></div>
+    <div class="canvas"><svg id="d-conexion" role="img" aria-label="Conexión Databricks Power BI"></svg></div>
+    <figcaption>El reporte no guarda una copia de los datos: pregunta a Databricks en el momento. Si se carga una plantilla corregida, el BI la refleja en la siguiente actualización, sin rehacer nada.</figcaption>
+  </figure>
+  <h3>La conexión en cinco pasos</h3>
+  <div class="pasos">
+    <div class="paso"><span>1</span><h4>Obtener datos</h4><p>En Power BI Desktop: <b>Obtener datos → Azure Databricks</b>, el conector nativo de Microsoft.</p></div>
+    <div class="paso"><span>2</span><h4>Motor de consulta</h4><p>Se indica el <b>servidor</b> y la <b>ruta</b> del SQL Warehouse del área, guardados como parámetros para cambiarlos sin rehacer el reporte.</p></div>
+    <div class="paso"><span>3</span><h4>Modo DirectQuery</h4><p>Los datos se consultan <b>en vivo</b>: el reporte siempre muestra la última carga validada.</p></div>
+    <div class="paso"><span>4</span><h4>Acceso corporativo</h4><p>Ingreso con la <b>cuenta de Credicorp Capital</b> (Azure Active Directory). Cada usuario ve solo lo que sus permisos permiten.</p></div>
+    <div class="paso"><span>5</span><h4>Tablas finales y publicación</h4><p>Se eligen las tablas del modelo (montos contables, gestión Dir/Ind y catálogos) y se publica en el <b>workspace del área</b> en Power BI Service.</p></div>
+  </div>
+  <div class="dos">
+    <div class="tarjeta"><h4>Por qué conexión en vivo</h4><ul>
+      <li><b>Una sola versión de la verdad:</b> el BI y Databricks muestran exactamente lo mismo.</li>
+      <li><b>Sin pasos manuales:</b> no se exportan ni se pegan archivos.</li>
+      <li><b>Al día:</b> cada carga nueva llega al reporte en la siguiente actualización.</li>
+      <li><b>Seguro:</b> los permisos se administran en un solo lugar.</li></ul></div>
+    <div class="tarjeta"><h4>Buenas prácticas que aplicamos</h4><ul>
+      <li>Solo las columnas que usa cada visual, nunca la tabla completa.</li>
+      <li>Filtros por año y país para que cada consulta sea liviana.</li>
+      <li>Cálculos y conversiones resueltos en Databricks, no en el reporte.</li>
+      <li>Servidor y ruta como parámetros, para mover el reporte de ambiente sin rehacerlo.</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section class="etapa" id="e8">
+  <div class="etq"><b>8</b>Reportes</div>
+  <h2>Power BI: las vistas para decidir</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>#</th><th>Vista</th><th>Responde</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><b>Contable</b> (Nivel 1 y 2, Formato Perú)</td><td>¿Cuánto presupuesta cada país, por rubro y mes?</td><td><span class="chip ch-dato">Funcionando</span></td></tr>
+      <tr><td class="num">2</td><td><b>Gestión Dir/Ind</b></td><td>¿Cuánto cuesta cada UdN, con su parte de indirectos?</td><td><span class="chip ch-dato">Funcionando</span></td></tr>
+      <tr><td class="num">3</td><td><b>Gestión con intercompanies</b></td><td>Contable + operaciones entre compañías del grupo</td><td><span class="chip ch-rev">Por definir</span></td></tr>
+    </tbody></table></div>
+  <p>Todas las vistas se pueden filtrar por país, mes, Nivel 1 y 2, UdN, CeCo, vehículo, cuenta y proveedor, en moneda local o en PEN. Los datos vienen de las tablas finales de la consolidación, organizadas como una estrella: en el centro los montos y alrededor las formas de cortarlos.</p>
+  <figure class="lienzo">
+    <div class="cab"><b>Diagrama 6 · Modelo de datos del BI</b><span>tablas de montos al centro, catálogos alrededor</span></div>
+    <div class="canvas"><svg id="d-modelo" role="img" aria-label="Modelo estrella del Power BI"></svg></div>
+    <figcaption>Una línea une un catálogo con la tabla de montos que filtra. Por ejemplo, elegir "Chile" en País filtra los montos contables y los de gestión al mismo tiempo.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 9 ============ -->
+<section class="etapa" id="impacto">
+  <div class="etq"><b>9</b>Impacto</div>
+  <h2>Antes vs ahora: el tiempo que se libera</h2>
+  <p class="lead">En el Ppto 2026 cada plantilla se subía con un ejecutable SQL, una por una. En el Ppto 2027 una sola corrida de Databricks carga, valida, consolida y reparte todo.</p>
+  <div class="av">
+    <div class="lado antes">
+      <div class="k">Antes · Ppto 2026</div>
+      <div class="big">≈ 36 horas</div>
+      <p>2,155 minutos para subir las 184 plantillas, una por una: ~10 min cada una y ~45 min las de TI. Unas 4.5 jornadas completas de un analista.</p>
+      <ul>
+        <li>Un ejecutable SQL por plantilla</li>
+        <li>Errores que se descubren tarde, revisando a mano</li>
+        <li>Indirectos en hojas aparte</li>
+        <li>Cuadre solo por país</li>
+      </ul>
+    </div>
+    <div class="lado ahora">
+      <svg class="montes" viewBox="0 0 520 300" aria-hidden="true">
+    <defs><linearGradient id="mg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D7DDE2"/><stop offset="1" stop-color="#637D8D"/></linearGradient>
+    <linearGradient id="mr2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DE604D"/><stop offset="1" stop-color="#B23521"/></linearGradient></defs>
+    <polygon points="40,300 150,150 260,300" fill="#2F71E5" opacity=".9"/>
+    <polygon points="150,300 330,46 510,300" fill="url(#mg2)"/>
+    <polygon points="230,300 300,206 370,300" fill="#3B4D56"/>
+    <polygon points="330,300 440,150 550,300" fill="url(#mr2)"/>
+  </svg>
+      <div class="k">Ahora · Ppto 2027</div>
+      <div class="big">≈ 5 minutos</div>
+      <p>por corrida, que reprocesa las 184 plantillas, las valida celda por celda y reparte Dir/Ind</p>
+      <ul>
+        <li>Se suben las carpetas de SharePoint tal cual</li>
+        <li>63 controles: cada error con su celda exacta</li>
+        <li>Reparto Dir/Ind mensual con la metodología nueva</li>
+        <li>25 controles de cuadre, 100 = 100 automático</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ahorro"><b>~430×</b><span>más rápido · de ~36 horas de trabajo manual a ~5 minutos de proceso automático</span></div>
+  <div class="escala" aria-label="Comparación de tiempos">
+    <div class="fila"><span>Ppto 2026</span><div class="pista"><div style="width:100%;background:#637D8D"></div></div><span class="v">≈ 36 h</span></div>
+    <div class="fila"><span>Ppto 2027</span><div class="pista"><div style="width:1.2%;min-width:6px;background:#D74028"></div></div><span class="v">≈ 5 min</span></div>
+  </div>
+  <div class="tabla"><table>
+    <thead><tr><th>Tarea</th><th>Ppto 2026 (SQL a mano)</th><th>Ppto 2027 (Databricks)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Subir una plantilla</b></td><td>~10 min con el ejecutable; ~45 min las de TI</td><td>Se copia la carpeta al Volume; entra en la siguiente corrida</td></tr>
+      <tr><td><b>Consolidar las 184</b></td><td>≈ 36 horas (≈ 4.5 jornadas)</td><td>Una corrida de minutos que reprocesa todo</td></tr>
+      <tr><td><b>Encontrar errores</b></td><td>Revisando Excel y consultas a mano</td><td>Flag automático con archivo, fila y celda; la línea va a cuarentena</td></tr>
+      <tr><td><b>Indirectos</b></td><td>Cálculo aparte en hojas de Excel</td><td>Dir/Ind mensual por país, comprobado al céntimo</td></tr>
+      <tr><td><b>Cuadre</b></td><td>Por país</td><td>Por plantilla, línea, mes, UdN y componente</td></tr>
+      <tr><td><b>Versiones</b></td><td>¿Cuál es la buena?</td><td>Historial por plantilla; la carga más reciente manda</td></tr>
+    </tbody></table></div>
+  <p class="muted" style="font-size:13px">Cálculo del Ppto 2026, con los tiempos informados por Planeamiento: 9 plantillas de TI (Staff TI y Tecnología y Comunicaciones) × 45 min + 175 plantillas × 10 min = 2,155 min ≈ 36 horas. El tiempo de Databricks es el de una corrida completa medida en la demo (≈ 5 min), que además valida cada celda, reparte Dir/Ind y ejecuta los controles de cuadre.</p>
+</section>
+
+<!-- ============ roles ============ -->
+<section class="etapa" id="roles">
+  <h2>Quién hace qué</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Rol</th><th>Responsabilidad</th><th>Cuándo</th></tr></thead>
+    <tbody>
+      <tr><td><b>Planeamiento</b><br><span class="muted" style="font-size:13px">Matias Fernando Castillo Quincho<br>Christian Pablo Vila Ramos<br>Jean Pierre Mendoza Cueva</span></td><td>Arma las plantillas con el Real, las publica, carga las devoluciones, revisa flags y publica el BI</td><td>Inicio del ciclo y en cada devolución</td></tr>
+      <tr><td><b>Áreas (UdN y Staff)</b></td><td>Completan el Ppto 2027 en negativo, sin tocar el Real ni mover la plantilla, y comentan las variaciones grandes</td><td>Dentro del plazo de entrega</td></tr>
+      <tr><td><b>Gestión de gastos</b></td><td>Revisa la vista Dir/Ind, los drivers y los casos en "Revisar" (CeCos sin driver, países sin base de reparto)</td><td>Después de cada carga</td></tr>
+      <tr><td><b>Jefatura de Planeamiento</b><br><span class="muted" style="font-size:13px">Luis Alonso Delgado Quiroz</span></td><td>Aprueba los drivers, las reglas de reparto y los cambios de metodología</td><td>Antes del cierre del presupuesto</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ============ faq ============ -->
+<section class="etapa" id="faq">
+  <h2>Preguntas frecuentes</h2>
+  <details><summary>¿Por qué un gasto en positivo es un error?</summary><div><p>Por convención, en el Ppto 2027 todo gasto va en negativo. Un positivo suele ser un signo invertido y, si entrara, restaría gasto. El Real 2026 sí puede tener positivos por extornos; ahí solo se informa.</p></div></details>
+  <details><summary>¿Qué pasa si un área no devuelve su plantilla?</summary><div><p>Figura como "pendiente de entrega" en el control de entrega, que muestra el % de avance por rubro. Cuando llega, entra en la siguiente carga sin rehacer nada.</p></div></details>
+  <details><summary>¿Por qué el indirecto de una UdN cambia de un mes a otro?</summary><div><p>Porque se reparte con su peso de ese mes: su directo (imputación + soporte directo) ÷ el directo total del país. Si la UdN concentra más gasto directo en un mes, ese mes recibe más indirecto. Con los mismos datos el resultado es siempre el mismo.</p></div></details>
+  <details><summary>¿Qué es "sin base de reparto"?</summary><div><p>Si un país no tiene gasto directo en un mes, su bolsa no tiene con qué repartirse. Ese monto queda identificado (control B5) para decidir qué hacer y no se pierde.</p></div></details>
+  <details><summary>¿Qué cambió con la metodología nueva?</summary><div><p>Antes la bolsa se repartía solo con la imputación directa. Ahora el peso incluye también el soporte directo que recibe cada UdN, y la bolsa suma lo que sobró del soporte directo más las áreas 100 % indirectas. Así una UdN que usa más soporte también absorbe la parte proporcional de los indirectos.</p></div></details>
+  <details><summary>¿Qué es un CeCo "sin driver" y qué hago con él?</summary><div><p>Es un CeCo de Staff que no aparece en la tabla de drivers. Su gasto va completo a la bolsa de indirectos. El control B7 lo lista para que Gestión de gastos decida si necesita un driver propio.</p></div></details>
+  <details><summary>¿Por qué no aparece Invertir para Crecer (IPC)?</summary><div><p>Por regla, IPC queda fuera de todas las plantillas, validaciones y reportes del Ppto27. Se gestiona por separado.</p></div></details>
+  <details><summary>¿En qué moneda se ve?</summary><div><p>En moneda local de cada país (PEN, COP, CLP, USD) y en PEN para consolidar. México se presenta en PEN. ASB agrupa todo Panamá (AVA y BNK). El tipo de cambio es el de la cabecera de la plantilla, igual en las 184.</p></div></details>
+  <details><summary>¿Y si un área modifica el Real 2026?</summary><div><p>Se marca como alerta (flag de cambios contra lo enviado), porque el ejercicio es el Ppto 2027. El Real oficial sigue siendo el de la TD.</p></div></details>
+</section>
+
+<!-- ============ glosario ============ -->
+<section class="etapa" id="glosario">
+  <h2>Glosario</h2>
+  <dl class="glos">
+    <dt>TD Regional</dt><dd>Tabla dinámica oficial con el gasto real de todas las compañías del grupo. Es la fuente de montos y CeCos.</dd>
+    <dt>CeCo</dt><dd>Centro de costo. Se escribe con número y nombre, por ejemplo "537 - Desarrollo de Negocios".</dd>
+    <dt>UdN</dt><dd>Unidad de negocio: MDK, NNFF, WM, AM, Tesorería, Tyba, JV CND, FINCORP, entre otras.</dd>
+    <dt>Staff</dt><dd>Áreas de soporte y corporativas (Legal, Operaciones, Finanzas…).</dd>
+    <dt>Vehículo</dt><dd>Compañía o vehículo legal donde se registra el gasto (por ejemplo, BNK y AVA en Panamá).</dd>
+    <dt>Driver</dt><dd>Porcentaje con el que un área de soporte reparte su gasto entre las UdN. Se toma de la tabla de drivers 2026.</dd>
+    <dt>Directo</dt><dd>Imputación directa + soporte directo de una UdN, por país y mes. Es la base del reparto.</dd>
+    <dt>Peso</dt><dd>Directo de la UdN ÷ directo total del país, en el mes. Es el % de la bolsa que recibe.</dd>
+    <dt>Bolsa de indirectos</dt><dd>Lo que sobró del soporte directo (fila STAFF de los drivers) + el gasto de las áreas 100 % indirectas, por país y mes.</dd>
+    <dt>Formato Perú</dt><dd>Estructura de Nivel 1 y Nivel 2 del cierre mensual, usada para ordenar el gasto.</dd>
+    <dt>Flag</dt><dd>Marca automática que indica un problema en un archivo, una línea o un monto.</dd>
+    <dt>Cuarentena</dt><dd>Líneas con error, apartadas del BI hasta que se corrigen. Siguen contando en el cuadre.</dd>
+    <dt>F26 / P27</dt><dd>Forecast 2026 (Real + proyección) y Presupuesto 2027 anual.</dd>
+    <dt>100 = 100</dt><dd>Regla de oro: lo que suman las plantillas es exactamente lo que suma la consolidación.</dd>
+    <dt>IPC</dt><dd>Invertir para Crecer. Siempre excluido del Ppto27.</dd>
+  </dl>
+</section>
+
+<!-- ============ autores ============ -->
+<section class="etapa" id="autores">
+  <h2>Autores</h2>
+  <p>Equipo de Planeamiento que diseñó y construyó el proceso del Ppto27.</p>
+  <div class="autores">
+    <div class="autor"><span class="ini">LD</span><b>Luis Alonso Delgado Quiroz</b></div>
+    <div class="autor"><span class="ini">CV</span><b>Christian Pablo Vila Ramos</b></div>
+    <div class="autor"><span class="ini">JM</span><b>Jean Pierre Mendoza Cueva</b></div>
+    <div class="autor"><span class="ini">MC</span><b>Matias Fernando Castillo Quincho</b></div>
+    <div class="autor"><span class="ini">YP</span><b>Yacomo Rodrigo Poma Rojas</b></div>
+  </div>
+</section>
+
+<div class="cierre"><svg class="montes" viewBox="0 0 520 300" aria-hidden="true">
+    <defs><linearGradient id="mg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D7DDE2"/><stop offset="1" stop-color="#637D8D"/></linearGradient>
+    <linearGradient id="mr3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DE604D"/><stop offset="1" stop-color="#B23521"/></linearGradient></defs>
+    <polygon points="40,300 150,150 260,300" fill="#2F71E5" opacity=".9"/>
+    <polygon points="150,300 330,46 510,300" fill="url(#mg3)"/>
+    <polygon points="230,300 300,206 370,300" fill="#3B4D56"/>
+    <polygon points="330,300 440,150 550,300" fill="url(#mr3)"/>
+  </svg><p>Ppto27 · de la plantilla al reparto, en minutos.</p></div>
+<footer>Ppto27 · Guía del proceso para Gestión de gastos · Planeamiento Credicorp Capital · octubre 2026<br>Desarrollado por Luis Alonso Delgado Quiroz, Jean Pierre Mendoza Cueva, Christian Pablo Vila Ramos, Matias Fernando Castillo Quincho y Yacomo Rodrigo Poma Rojas.<br>© 2026 Credicorp Capital. Todos los derechos reservados. Uso interno.</footer>
+</main>
+</div>
+
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function port(n,s){var x=n.x,y=n.y,w=n.w,h=n.h;
+  if(s==='l')return[x,y+h/2]; if(s==='r')return[x+w,y+h/2]; if(s==='t')return[x+w/2,y]; return[x+w/2,y+h]}
+function texto(g,n){
+  var t1=(n.t||'').split('\n'),t2=n.s?n.s.split('\n'):[],L1=18,L2=15;
+  var H=t1.length*L1+t2.length*L2, left=n.al==='l';
+  var x=left?n.x+14:n.x+n.w/2, y=n.y+n.h/2-H/2+13;
+  if(n.dy)y+=n.dy;
+  t1.forEach(function(s){var e=el('text',{x:x,y:y,'class':'t1','text-anchor':left?'start':'middle'},g);e.textContent=s;y+=L1});
+  y+=1;
+  t2.forEach(function(s){var e=el('text',{x:x,y:y,'class':'t2','text-anchor':left?'start':'middle'},g);e.textContent=s;y+=L2});
+}
+function forma(g,n){
+  var c='sh c-'+(n.c||'plain'),x=n.x,y=n.y,w=n.w,h=n.h;
+  if(n.k==='dec')el('polygon',{points:[x+w/2,y,x+w,y+h/2,x+w/2,y+h,x,y+h/2].join(' '),'class':c},g);
+  else if(n.k==='term')el('rect',{x:x,y:y,width:w,height:h,rx:h/2,'class':c},g);
+  else if(n.k==='db'){var r=10;el('path',{d:'M'+x+' '+(y+r)+' a'+w/2+' '+r+' 0 0 1 '+w+' 0 v'+(h-2*r)+' a'+w/2+' '+r+' 0 0 1 '+(-w)+' 0z','class':c},g);
+    el('path',{d:'M'+x+' '+(y+r)+' a'+w/2+' '+r+' 0 0 0 '+w+' 0','class':c,'fill':'none'},g);}
+  else if(n.k==='doc'){var q=12;el('path',{d:'M'+x+' '+y+' h'+w+' v'+(h-q)+' q'+(-w/4)+' '+(-q*1.4)+' '+(-w/2)+' 0 t'+(-w/2)+' 0z','class':c},g);}
+  else if(n.k==='note'){var f=14;el('path',{d:'M'+x+' '+y+' h'+(w-f)+' l'+f+' '+f+' v'+(h-f)+' h'+(-w)+'z','class':'sh c-amber'},g);}
+  else el('rect',{x:x,y:y,width:w,height:h,rx:6,'class':c},g);
+}
+function ruta(e,N){
+  var a=e.f.split('.'),b=e.t.split('.'),A=N[a[0]],B=N[b[0]],sa=a[1],sb=b[1];
+  var p=port(A,sa),q=port(B,sb);
+  if(e.fy!=null)p[1]=e.fy; if(e.ty!=null)q[1]=e.ty; if(e.fx!=null)p[0]=e.fx; if(e.tx!=null)q[0]=e.tx;
+  var H=function(s){return s==='l'||s==='r'};
+  var o=e.off||20;
+  if(e.st)return[p,q];
+  if(sa===sb){
+    if(sa==='t'){var u=Math.min(p[1],q[1])-o;return[p,[p[0],u],[q[0],u],q]}
+    if(sa==='b'){var d=Math.max(p[1],q[1])+o;return[p,[p[0],d],[q[0],d],q]}
+    if(sa==='r'){var r=Math.max(p[0],q[0])+o;return[p,[r,p[1]],[r,q[1]],q]}
+    var l=Math.min(p[0],q[0])-o;return[p,[l,p[1]],[l,q[1]],q];
+  }
+  if(H(sa)&&H(sb)){if(Math.abs(p[1]-q[1])<1)return[p,q];var mx=e.mx!=null?e.mx:(p[0]+q[0])/2;return[p,[mx,p[1]],[mx,q[1]],q]}
+  if(!H(sa)&&!H(sb)){if(Math.abs(p[0]-q[0])<1)return[p,q];var my=e.my!=null?e.my:(p[1]+q[1])/2;return[p,[p[0],my],[q[0],my],q]}
+  if(H(sa))return[p,[q[0],p[1]],q];
+  return[p,[p[0],q[1]],q];
+}
+var nd=0;
+function diagrama(id,S){
+  var svg=document.getElementById(id); if(!svg)return;
+  svg.setAttribute('viewBox','0 0 '+S.w+' '+S.h);
+  var mk='ah'+(++nd), defs=el('defs',{},svg), m=el('marker',{id:mk,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:8,markerHeight:8,orient:'auto-start-reverse'},defs);
+  el('path',{d:'M0 0 L10 5 L0 10z','class':'ah'},m);
+  (S.lanes||[]).forEach(function(l){
+    el('rect',{x:0,y:l.y,width:S.w,height:l.h,'class':'lane'},svg);
+    el('rect',{x:0,y:l.y,width:150,height:l.h,'class':'lanehd'},svg);
+    var ls=l.t.split('\n'),y=l.y+l.h/2-(ls.length*16)/2+12;
+    ls.forEach(function(s,i){var e=el('text',{x:14,y:y+i*16,'class':i?'lanes':'lanet'},svg);e.textContent=s});
+  });
+  var N={}; S.n.forEach(function(n){N[n.id]=n});
+  var ge=el('g',{},svg), gn=el('g',{},svg), gl=el('g',{},svg);
+  (S.e||[]).forEach(function(e){
+    var P=ruta(e,N);
+    var a={d:'M'+P.map(function(p){return p[0]+' '+p[1]}).join(' L'),'class':'ed'+(e.d?' d':'')+(e.ln?' ln':'')};
+    if(!e.na)a['marker-end']='url(#'+mk+')';
+    el('path',a,ge);
+    if(e.l){
+      var best=0,bi=0;for(var i=0;i<P.length-1;i++){var len=Math.abs(P[i+1][0]-P[i][0])+Math.abs(P[i+1][1]-P[i][1]);if(len>best){best=len;bi=i}}
+      if(e.seg!=null)bi=e.seg;
+      var cx=(P[bi][0]+P[bi+1][0])/2,cy=(P[bi][1]+P[bi+1][1])/2;
+      var w=e.l.length*6.6+12;
+      el('rect',{x:cx-w/2,y:cy-10,width:w,height:20,rx:4,'class':'elb'},gl);
+      var t=el('text',{x:cx,y:cy+4,'class':'elt','text-anchor':'middle'},gl);t.textContent=e.l;
+    }
+  });
+  S.n.forEach(function(n){var g=el('g',{'class':n.c==='ink'?'on':''},gn);forma(g,n);texto(g,n)});
+}
+
+/* ---------- Mapa general ---------- */
+diagrama('d-mapa',{w:1160,h:620,lanes:[
+  {y:0,h:150,t:'Planeamiento\nArma las plantillas\ncon el Real 2026'},
+  {y:150,h:150,t:'Áreas UdN y Staff\nPresupuestan 2027'},
+  {y:300,h:155,t:'Databricks\nLee, valida\ny reparte'},
+  {y:455,h:165,t:'Power BI\nReportes para\ndecidir'}],
+ n:[
+  {id:'td',k:'db',x:180,y:32,w:160,h:88,t:'TD Regional',s:'Real 2026 Ene–Ago'},
+  {id:'arm',x:385,y:42,w:175,h:70,t:'Armar plantillas',s:'filtros y reglas de línea'},
+  {id:'cua',k:'dec',x:610,y:26,w:170,h:104,t:'¿Cuadra con\nla TD?'},
+  {id:'sp',k:'doc',x:840,y:36,w:200,h:88,t:'184 plantillas',s:'en SharePoint'},
+  {id:'rec',x:852,y:190,w:176,h:70,t:'Recibe su plantilla',s:'con su Real 2026'},
+  {id:'lle',x:615,y:190,w:180,h:70,c:'coral',t:'Llena Ppto 2027',s:'12 meses, en negativo'},
+  {id:'dev',k:'doc',x:385,y:186,w:175,h:84,t:'Devuelve',s:'en SharePoint'},
+  {id:'car',x:180,y:342,w:160,h:72,t:'Carga',s:'carpetas o Excel sueltos'},
+  {id:'lee',x:375,y:342,w:160,h:72,t:'Lee y ordena',s:'una fila por línea y mes'},
+  {id:'val',x:570,y:342,w:160,h:72,c:'amber',t:'Valida',s:'63 controles'},
+  {id:'rep',x:765,y:342,w:160,h:72,c:'green',t:'Reparte Dir/Ind',s:'drivers y bolsa'},
+  {id:'cud',k:'dec',x:965,y:326,w:170,h:104,t:'¿100 = 100?'},
+  {id:'bi',x:835,y:500,w:300,h:80,c:'ink',t:'Power BI',s:'Contable · Gestión Dir/Ind\nValidación'},
+  {id:'dec',k:'term',x:420,y:510,w:260,h:60,t:'Decisiones de presupuesto',s:'jefaturas y gerencia'}],
+ e:[
+  {f:'td.r',t:'arm.l'},{f:'arm.r',t:'cua.l'},{f:'cua.r',t:'sp.l',l:'Sí'},
+  {f:'cua.t',t:'arm.t',l:'No: corregir',off:14},
+  {f:'sp.b',t:'rec.t'},{f:'rec.l',t:'lle.r'},{f:'lle.l',t:'dev.r'},
+  {f:'dev.b',t:'car.t',my:312},{f:'car.r',t:'lee.l'},{f:'lee.r',t:'val.l'},{f:'val.r',t:'rep.l'},{f:'rep.r',t:'cud.l'},
+  {f:'cud.t',t:'val.t',l:'No: revisar',off:10},
+  {f:'cud.b',t:'bi.t',l:'Sí',my:470},{f:'bi.l',t:'dec.r'}]});
+
+/* ---------- Armado ---------- */
+diagrama('d-armado',{w:1160,h:480,n:[
+  {id:'s1',k:'db',x:20,y:30,w:210,h:90,t:'TD Regional (.xlsb)',s:'montos y CeCos'},
+  {id:'s2',k:'db',x:20,y:160,w:210,h:90,t:'Bases consolidadas',s:'OyS · CS Administrativo\nConsultorías y Honorarios'},
+  {id:'s3',k:'db',x:20,y:300,w:210,h:90,t:'Maestros',s:'CeCos, proveedores,\nhomologaciones'},
+  {id:'f',x:300,y:30,w:240,h:220,c:'sage',al:'l',t:'Filtros oficiales',s:'• Real 2026, Ene–Ago\n• Vista 1 y 3\n• sin INTERCOM ni ELIM\n• con ajustes (OyS sin)\n• sin IPC (regla sagrada)'},
+  {id:'r',x:600,y:30,w:240,h:220,c:'coral',al:'l',t:'Reglas de línea',s:'• CeCo real con número\n• nunca "Varios"\n• proveedor homologado\n• una fila por cuenta (UdN)\n• ceros como celda vacía'},
+  {id:'p',k:'doc',x:900,y:58,w:200,h:110,t:'Plantilla Ppto27',s:'41 columnas\nReal · Forecast · Ppto'},
+  {id:'v',k:'dec',x:890,y:228,w:220,h:136,t:'¿Cuadra?',s:'país × vehículo × CeCo\n× cuenta × mes'},
+  {id:'ok',k:'term',x:880,y:400,w:240,h:58,c:'green',t:'Ruta oficial lista',s:'184 plantillas'}],
+ e:[
+  {f:'s1.r',t:'f.l',ty:75},{f:'s2.r',t:'f.l',ty:205},{f:'s3.r',t:'r.b'},
+  {f:'f.r',t:'r.l'},{f:'r.r',t:'p.l'},{f:'p.b',t:'v.t'},
+  {f:'v.b',t:'ok.t',l:'Sí'},{f:'v.r',t:'p.r',l:'No: se corrige',off:30}]});
+
+/* ---------- Carpetas ---------- */
+diagrama('d-carpetas',{w:1160,h:340,n:[
+  {id:'root',x:430,y:16,w:300,h:62,c:'ink',t:'SharePoint · Plantillas 2027',s:'184 plantillas'},
+  {id:'c1',x:30,y:130,w:190,h:72,t:'02 Gastos de Personal',s:'17 · por país'},
+  {id:'c2',x:255,y:130,w:190,h:72,c:'coral',t:'03 Gastos Administrativos',s:'152 · UdN, Staff y rubros'},
+  {id:'c3',x:480,y:130,w:190,h:72,t:'04 Tecnología y Com.',s:'5 · una por país'},
+  {id:'c4',x:705,y:130,w:190,h:72,t:'05 Depreciación y Amort.',s:'5 · una por país'},
+  {id:'c5',x:930,y:130,w:190,h:72,t:'06 Impuestos y contrib.',s:'5 · una por país'},
+  {id:'nt',k:'note',x:170,y:250,w:820,h:72,al:'l',t:'Subcarpetas de 03 Gastos Administrativos',s:'UDN · STAFF · CS Administrativo · Consultorías · Asesorías Legales · Asesorías Tributarias y Financieras · Dietas\nFacilities (Oficinas y Suministros) · Marketing · Otros Gastos Administrativos · Pagos TRX'}],
+ e:[{f:'root.b',t:'c1.t',my:104},{f:'root.b',t:'c2.t',my:104},{f:'root.b',t:'c3.t',my:104},{f:'root.b',t:'c4.t',my:104},{f:'root.b',t:'c5.t',my:104},
+    {f:'c2.b',t:'nt.t',d:1,tx:350}]});
+
+/* ---------- Arquitectura ---------- */
+diagrama('d-arq',{w:1160,h:330,n:[
+  {id:'v',k:'doc',x:10,y:50,w:165,h:96,t:'Volume',s:'carpetas de\nSharePoint tal cual'},
+  {id:'b',k:'db',x:205,y:44,w:170,h:110,c:'sage',t:'Bronze',s:'lectura cruda\nhash y versiones'},
+  {id:'s',k:'db',x:405,y:44,w:170,h:110,c:'amber',t:'Silver',s:'63 reglas por celda\nOK · alerta · cuarentena'},
+  {id:'g',k:'db',x:605,y:44,w:170,h:110,c:'green',t:'Gold',s:'modelo estrella\ncontable + Dir/Ind'},
+  {id:'c',k:'dec',x:800,y:40,w:180,h:118,t:'Control',s:'25 controles\n100 = 100'},
+  {id:'p',k:'term',x:1005,y:70,w:145,h:58,c:'ink',t:'Power BI'},
+  {id:'n',k:'note',x:205,y:220,w:770,h:84,al:'l',t:'Si un control falla, no se publica',s:'el reporte señala archivo, fila y celda exacta del problema; se corrige la plantilla y se vuelve a cargar.\nCada corrida reprocesa las 184 plantillas: siempre se publica una foto completa y consistente.'}],
+ e:[{f:'v.r',t:'b.l'},{f:'b.r',t:'s.l'},{f:'s.r',t:'g.l'},{f:'g.r',t:'c.l'},{f:'c.r',t:'p.l',l:'OK'},
+    {f:'c.b',t:'n.r',l:'falla',ty:262}]});
+
+/* ---------- Carga y validación ---------- */
+diagrama('d-carga',{w:1160,h:530,n:[
+  {id:'a',k:'doc',x:16,y:40,w:175,h:86,t:'Llega un archivo',s:'carpeta o Excel suelto'},
+  {id:'d1',k:'dec',x:240,y:28,w:195,h:110,t:'¿Es una plantilla\nconocida?'},
+  {id:'f14',x:247,y:205,w:180,h:72,c:'amber',t:'F14 · A revisar',s:'se asigna y se reprocesa'},
+  {id:'d2',k:'dec',x:490,y:28,w:195,h:110,t:'¿Ya estaba\nidéntico?'},
+  {id:'ign',x:497,y:205,w:180,h:72,c:'sage',t:'Se ignora',s:'mismo contenido'},
+  {id:'ver',x:735,y:46,w:200,h:74,t:'Versión nueva',s:'la anterior queda\nen el historial'},
+  {id:'lin',x:975,y:46,w:170,h:74,c:'ink',t:'Cada línea × mes'},
+  {id:'d3',k:'dec',x:962,y:280,w:196,h:110,t:'¿Tiene un\nERROR?'},
+  {id:'q',x:970,y:440,w:180,h:74,c:'coral',t:'Cuarentena',s:'fuera del BI; suma\nen el cuadre'},
+  {id:'d4',k:'dec',x:700,y:280,w:196,h:110,t:'¿Tiene una\nALERTA?'},
+  {id:'oka',x:708,y:440,w:180,h:74,c:'amber',t:'OK con alerta',s:'entra al BI y se revisa'},
+  {id:'ok',x:440,y:298,w:180,h:74,c:'green',t:'OK',s:'entra al BI'},
+  {id:'bi',k:'term',x:150,y:305,w:200,h:60,c:'ink',t:'Power BI'}],
+ e:[
+  {f:'a.r',t:'d1.l'},{f:'d1.b',t:'f14.t',l:'No'},{f:'d1.r',t:'d2.l',l:'Sí'},
+  {f:'d2.b',t:'ign.t',l:'Sí'},{f:'d2.r',t:'ver.l',l:'No'},{f:'ver.r',t:'lin.l'},
+  {f:'lin.b',t:'d3.t',fx:1060,tx:1060},{f:'d3.b',t:'q.t',l:'Sí'},{f:'d3.l',t:'d4.r',l:'No'},
+  {f:'d4.b',t:'oka.t',l:'Sí'},{f:'d4.l',t:'ok.r',l:'No'},{f:'ok.l',t:'bi.r'},{f:'oka.l',t:'bi.b'}]});
+
+/* ---------- Dir/Ind ---------- */
+diagrama('d-dirind',{w:1160,h:630,n:[
+  {id:'st',k:'term',x:16,y:40,w:210,h:70,c:'ink',t:'Línea del Ppto 2027',s:'país · CeCo · vehículo · mes'},
+  {id:'dd',k:'dec',x:280,y:20,w:210,h:110,t:'¿El CeCo tiene\ndriver?'},
+  {id:'ty',k:'dec',x:555,y:20,w:220,h:110,t:'¿Qué fila\ndel driver?'},
+  {id:'o1',x:860,y:6,w:285,h:62,c:'green',t:'1 · Imputación directa',s:'fila de una UdN de negocio'},
+  {id:'o2',x:860,y:86,w:285,h:62,c:'green',t:'2 · Soporte directo',s:'área de soporte, con su %'},
+  {id:'nb',k:'dec',x:270,y:200,w:230,h:130,t:'¿CeCo de negocio\nen plantilla UdN?',s:'2xx, 5xx, 6xx, 8xx,\n9xx o Tyba',dy:4},
+  {id:'o1b',x:16,y:228,w:210,h:76,c:'green',t:'1 · Imputación directa',s:'100 % a la UdN\nde la plantilla'},
+  {id:'nt',k:'note',x:705,y:200,w:440,h:76,al:'l',t:'A la bolsa: sobrante del soporte + 100 % indirectas',s:'fila STAFF de los drivers · Finanzas, Cumplimiento, Auditoría,\nGerencia General, Bolsa CEO, CENTRALIZADO'},
+  {id:'bo',k:'db',x:295,y:390,w:180,h:96,c:'amber',t:'Bolsa de',s:'indirectos\npor país y mes',dy:2},
+  {id:'rp',x:560,y:500,w:300,h:80,c:'coral',t:'3 · Indirecto asignado',s:'bolsa × directo de la UdN\n÷ directo total del país'}],
+ e:[
+  {f:'st.r',t:'dd.l'},{f:'dd.r',t:'ty.l',l:'Sí'},
+  {f:'ty.r',t:'o1.l',l:'UdN',mx:818,seg:1},{f:'ty.r',t:'o2.l',l:'Soporte',mx:818,seg:1},
+  {f:'dd.b',t:'nb.t',l:'No'},{f:'nb.l',t:'o1b.r',l:'Sí'},{f:'nb.b',t:'bo.t',l:'No'},
+  {f:'ty.b',t:'bo.r',l:'STAFF',seg:0},
+  {f:'bo.b',t:'rp.l'},
+  {f:'o1b.b',t:'rp.b',d:1,l:'peso = directo (1 + 2)',off:22}]});
+
+/* ---------- Conexión Databricks → Power BI ---------- */
+diagrama('d-conexion',{w:1160,h:300,n:[
+  {id:'g',k:'db',x:10,y:60,w:200,h:120,c:'green',t:'Databricks',s:'tablas finales\nvalidadas y cuadradas'},
+  {id:'w',x:265,y:80,w:200,h:80,t:'SQL Warehouse',s:'motor de consulta\nsiempre disponible'},
+  {id:'c',x:520,y:80,w:200,h:80,t:'Conector nativo',s:'Azure Databricks\nen Power BI'},
+  {id:'a',k:'dec',x:770,y:56,w:170,h:128,t:'¿Cuenta',s:'corporativa\ncon permiso?'},
+  {id:'r',k:'term',x:990,y:90,w:160,h:60,c:'ink',t:'Reporte',s:'Contable · Dir/Ind'},
+  {id:'n',k:'note',x:265,y:216,w:640,h:66,al:'l',t:'DirectQuery: el reporte consulta en vivo',s:'no guarda copias; cada actualización trae la última carga validada'}],
+ e:[{f:'g.r',t:'w.l'},{f:'w.r',t:'c.l'},{f:'c.r',t:'a.l'},{f:'a.r',t:'r.l',l:'Sí'},{f:'w.b',t:'n.t',d:1,na:1,tx:365}]});
+
+/* ---------- Cadena de cuadre ---------- */
+diagrama('d-cuadre',{w:1160,h:200,n:[
+  {id:'a',k:'doc',x:10,y:50,w:180,h:90,t:'Plantillas',s:'suma de las 184'},
+  {id:'b',x:245,y:56,w:190,h:76,t:'Contable',s:'BI + cuarentena'},
+  {id:'c',x:490,y:56,w:190,h:76,c:'green',t:'Directo + Indirecto',s:'por país y mes'},
+  {id:'d',x:735,y:56,w:190,h:76,c:'coral',t:'Recalculo',s:'independiente'},
+  {id:'e',k:'term',x:975,y:64,w:170,h:60,c:'ink',t:'Diferencia 0'}],
+ e:[{f:'a.r',t:'b.l',l:'B1'},{f:'b.r',t:'c.l',l:'B1 · B6'},{f:'c.r',t:'d.l',l:'B3 · B4'},{f:'d.r',t:'e.l',l:'OK'}]});
+
+/* ---------- Modelo estrella ---------- */
+var dims=[['fe','Fecha','mes y año',140,30],['py','Línea PyG','Formato Perú N1/N2',380,30],['pa','País','moneda y TC',620,30],['pl','Plantilla','tipo, área, entrega',860,30],
+          ['ce','CeCo','número y nombre',140,380],['ve','Vehículo','compañía',380,380],['cu','Cuenta','cuenta contable',620,380],['pr','Proveedor','homologado',860,380]];
+var nm=[{id:'f1',x:330,y:200,w:230,h:80,c:'ink',t:'fact_ppto',s:'contable · línea × mes'},
+        {id:'f2',x:610,y:200,w:240,h:80,c:'ink',t:'fact_gestion_dirind',s:'línea × UdN × componente'},
+        {id:'ff',x:20,y:150,w:200,h:66,c:'amber',t:'fact_flags',s:'controles por línea'},
+        {id:'df',x:20,y:270,w:200,h:62,t:'Flag',s:'catálogo de 63'},
+        {id:'ud',x:940,y:140,w:200,h:56,t:'UdN',s:'unidad de negocio'},
+        {id:'co',x:940,y:212,w:200,h:56,t:'Componente',s:'directo · indirecto'},
+        {id:'dr',x:940,y:284,w:200,h:56,t:'Driver',s:'% por país y CeCo'}];
+var em=[{f:'ff.r',t:'f1.l',fy:183,ty:225,na:1,ln:1},{f:'df.t',t:'ff.b',st:1,na:1,ln:1},
+        {f:'ud.l',t:'f2.r',st:1,na:1,ln:1,ty:222},{f:'co.l',t:'f2.r',st:1,na:1,ln:1},{f:'dr.l',t:'f2.r',st:1,na:1,ln:1,ty:258}];
+dims.forEach(function(d){
+  nm.push({id:d[0],x:d[3],y:d[4],w:170,h:58,t:d[1],s:d[2]});
+  var top=d[4]<100, s=top?'.b':'.t', ft=top?'.t':'.b';
+  em.push({f:d[0]+s,t:'f1'+ft,st:1,na:1,ln:1});
+  if(['cu','pr'].indexOf(d[0])<0)em.push({f:d[0]+s,t:'f2'+ft,st:1,na:1,ln:1});
+});
+diagrama('d-modelo',{w:1160,h:460,n:nm,e:em});
+
+/* ---------- Formato Perú ---------- */
+var FP=[['Gastos del Personal',[['','Remuneración Fija'],['','Remuneración Variable'],['Otros gastos de personal','OGP - Bienestar/Eventos'],['Otros gastos de personal','OGP - Cultura y Com. Interna'],['Otros gastos de personal','OGP - Consultoría'],['Otros gastos de personal','OGP - Seguros y Salud'],['Otros gastos de personal','OGP - Servicios Compensaciones'],['Otros gastos de personal','OGP - Otros Gastos Personal'],['Otros gastos de personal','OGP - Selección & On boarding'],['Otros gastos de personal','OGP - Talento'],['','Capacitaciones'],['','Incentivo Corto Plazo'],['','Incentivo Largo Plazo']]],
+ ['Gastos Administrativos',[['','Misiones'],['C & CS','Consultorías y honorarios'],['C & CS','CS Administrativo'],['','Marketing'],['','Gastos de Representación'],['','Suscripciones y servicios de información'],['','Pagos transaccionales, bolsas y otros'],['','Transporte y Mensajería'],['','Oficinas y Suministros'],['Otros Gastos','Provisión de Incobrables'],['Otros Gastos','Donaciones']]],
+ ['Gastos de TI',[['','Licencias'],['','Aplicaciones'],['','Infraestructura'],['','Comunicaciones'],['','Cloud'],['','Consultorías'],['','Equipos de Usuario e Impresoras'],['','Servicio de HelpDesk']]],
+ ['Otros Gastos',[['','Depreciación y Amortización'],['','Impuestos y Contribuciones'],['','Otros gastos']]]];
+var fp=document.getElementById('fp'),h='';
+FP.forEach(function(b,i){var g=null,li='';
+  b[1].forEach(function(x){if(x[0]&&x[0]!==g)li+='<li class="grp">'+x[0]+'</li>';if(!x[0]&&g)li+='';g=x[0]||null;li+='<li>'+x[1].replace(/&/g,'&amp;')+'</li>'});
+  h+='<div class="n1"><h4>'+(i+1)+' · '+b[0]+'<span>'+b[1].length+' líneas</span></h4><ol>'+li+'</ol></div>'});
+fp.innerHTML=h;
+
+/* ---------- Ejemplo de reparto (metodología nueva: peso = imputación + soporte directo) ---------- */
+var U=[['MDK',-300,-50],['WM',-240,-40],['NNFF',-170,-20],['AM',-90,-20],['Tesorería',-60,-10]],bolsa=-400,sob=-35,ind100=-365;
+var tot=U.reduce(function(a,u){return a+u[1]+u[2]},0),ti=U.reduce(function(a,u){return a+u[1]},0),ts=U.reduce(function(a,u){return a+u[2]},0);
+var f=function(v){return v.toLocaleString('es-PE',{minimumFractionDigits:1,maximumFractionDigits:1})};
+var b1='',b2='',filas='',si=0;
+U.forEach(function(u,i){var d=u[1]+u[2],p=d/tot,ind=Math.round(bolsa*p*10)/10;si+=ind;
+  b1+='<div class="u'+(i+1)+'" style="width:'+(p*100)+'%">'+u[0]+'</div>';
+  b2+='<div class="u'+(i+1)+'" style="width:'+(p*100)+'%">'+f(ind)+'</div>';
+  filas+='<tr><td>'+u[0]+'</td><td class="num">'+f(u[1])+'</td><td class="num">'+f(u[2])+'</td><td class="num"><b>'+f(d)+'</b></td><td class="num">'+f(p*100)+' %</td><td class="num">'+f(ind)+'</td><td class="num"><b>'+f(d+ind)+'</b></td></tr>'});
+document.getElementById('reparto').innerHTML=
+ '<div class="barlab"><span><b>Directo</b> por UdN (imputación + soporte directo)</span><span>total '+f(tot)+'</span></div><div class="barra">'+b1+'</div>'+
+ '<div class="barlab" style="margin-top:14px"><span><b>Bolsa</b> ('+f(sob)+' sobrante del soporte + '+f(ind100)+' áreas 100 % indirectas) repartida con los mismos %</span><span>total '+f(bolsa)+'</span></div><div class="barra">'+b2+'</div>'+
+ '<div class="tabla"><table><thead><tr><th>UdN</th><th class="num">Imputación directa</th><th class="num">Soporte directo</th><th class="num">Directo</th><th class="num">Peso</th><th class="num">Indirecto asignado</th><th class="num">Total UdN</th></tr></thead><tbody>'+filas+
+ '<tr><td><b>Total</b></td><td class="num"><b>'+f(ti)+'</b></td><td class="num"><b>'+f(ts)+'</b></td><td class="num"><b>'+f(tot)+'</b></td><td class="num"><b>'+f(100)+' %</b></td><td class="num"><b>'+f(si)+'</b></td><td class="num"><b>'+f(tot+si)+'</b></td></tr></tbody></table></div>';
+
+/* ---------- Controles ---------- */
+var C=[['A1 · Sin mapeo','Toda línea encaja en un Nivel 1 y Nivel 2 del Formato Perú.','dato'],
+ ['A2 · Positivos','Cuántas líneas tienen gasto en positivo (van a cuarentena).','dato'],
+ ['A3 · Tipo de cambio','Cada país tiene su tipo de cambio 2027 y la conversión a PEN es correcta.','crit'],
+ ['B1 · Conservación','Por línea y mes, Directo + Indirecto = contable. No se crea ni se pierde gasto.','crit'],
+ ['B2 · Drivers al 100 %','Cada CeCo × país × vehículo reparte exactamente el 100 %.','crit'],
+ ['B3 · Recalculo','Un cálculo independiente da lo mismo por línea, mes, UdN y componente.','crit'],
+ ['B4 · Proporcionalidad','El indirecto de cada UdN es su peso × la bolsa: peso = su directo (imputación + soporte) ÷ el directo del país, en ese mes.','crit'],
+ ['B5 · Sin base de reparto','Países o meses con bolsa pero sin gasto directo con qué repartirla.','dato'],
+ ['B6 · Fuera del Dir/Ind','Lo que no entra al reparto (por ejemplo, cuarentena) está identificado.','dato'],
+ ['B7 · Sin driver','CeCos de Staff sin driver: su gasto fue a la bolsa. Revisar si necesitan uno.','rev']];
+var cl={crit:['ch-crit','Crítico'],dato:['ch-dato','Dato'],rev:['ch-rev','Revisar']};
+document.getElementById('controles').innerHTML=C.map(function(c){return '<tr><td><b>'+c[0]+'</b></td><td>'+c[1]+'</td><td><span class="chip '+cl[c[2]][0]+'">'+cl[c[2]][1]+'</span></td></tr>'}).join('');
+
+/* ---------- Catálogo de flags ---------- */
+var FLG=[{"cod": "C01", "cat": "Cambio vs enviado", "sev": "ALERTA", "nom": "Línea nueva con montos en Real 2026", "regla": "El área escribió montos en Ene–Ago 26 de una línea que no existía. El ejercicio se enfoca en Ppto 2027: el Real se toma de la TD", "acc": "Ignorar Real del archivo; si era presupuesto, moverlo a 2027"}, {"cod": "C02", "cat": "Cambio vs enviado", "sev": "ALERTA", "nom": "Real 2026 modificado", "regla": "Los montos Ene–Ago 26 difieren de los enviados (editados o redondeados)", "acc": "Ignorar Real del archivo; Real = TD"}, {"cod": "C03", "cat": "Cambio vs enviado", "sev": "ALERTA", "nom": "Textos de una línea del Real modificados", "regla": "Cambiaron vehículo, proveedor, glosa, etc. de una línea con Real", "acc": "Registrar; vehículo distinto al contable se revisa"}, {"cod": "C04", "cat": "Cambio vs enviado", "sev": "ALERTA", "nom": "Línea del Real eliminada", "regla": "Una línea enviada con Real ya no está", "acc": "Revisar si fue intencional"}, {"cod": "F01", "cat": "Archivo", "sev": "BLOQUEANTE", "nom": "Falta la hoja Ppto27", "regla": "La hoja fue renombrada o borrada", "acc": "Rechazar archivo y devolver al área"}, {"cod": "F02", "cat": "Archivo", "sev": "BLOQUEANTE", "nom": "Falta la tabla Tabla1", "regla": "Convirtieron la tabla en rango o la renombraron", "acc": "Rechazar archivo"}, {"cod": "F03", "cat": "Archivo", "sev": "BLOQUEANTE", "nom": "Columnas insertadas, borradas o movidas", "regla": "El encabezado no coincide en cantidad/orden con el estándar A..AO", "acc": "Rechazar archivo"}, {"cod": "F04", "cat": "Archivo", "sev": "ALERTA", "nom": "Encabezado con caracteres dañados", "regla": "Mismo orden y cantidad, pero el texto del título cambió (p. ej. \"¿\" en vez de \"País\")", "acc": "Mapear por posición y registrar"}, {"cod": "F05", "cat": "Archivo", "sev": "ERROR", "nom": "Datos fuera de Tabla1", "regla": "Hay celdas con valores debajo o a la derecha de la tabla: no se consolidan", "acc": "No se cargan; devolver para que las pasen dentro de la tabla"}, {"cod": "F06", "cat": "Archivo", "sev": "INFO", "nom": "Fila de totales dentro de Tabla1", "regla": "Activaron \"Fila de totales\" (SUBTOTAL): duplicaría el monto si se lee como línea", "acc": "Excluir la fila de totales"}, {"cod": "F07", "cat": "Archivo", "sev": "ALERTA", "nom": "Tipo de cambio guardado como texto", "regla": "Filas 3–5 (TC) son texto con espacio duro: cualquier fórmula que las use da #VALUE!", "acc": "Corregir en la plantilla base; el TC se toma de tabla maestra"}, {"cod": "F08", "cat": "Archivo", "sev": "ALERTA", "nom": "Hojas distintas al estándar", "regla": "Agregaron/borraron hojas o la hoja Tablas quedó visible", "acc": "Registrar; validar listas"}, {"cod": "F09", "cat": "Archivo", "sev": "INFO", "nom": "Nombre de archivo distinto al enviado", "regla": "Cambió el nombre (tildes, sufijos, versión)", "acc": "Identificar la plantilla por metadatos/tag, no por nombre"}, {"cod": "F10", "cat": "Archivo", "sev": "BLOQUEANTE", "nom": "Archivo duplicado", "regla": "Mismo contenido (hash) que otro archivo cargado", "acc": "Cargar uno solo"}, {"cod": "F11", "cat": "Archivo", "sev": "ERROR", "nom": "País de las líneas distinto al de la carpeta", "regla": "La plantilla de un país trae líneas de otro", "acc": "Cuarentena de esas líneas"}, {"cod": "F12", "cat": "Archivo", "sev": "INFO", "nom": "Nombre no UTF-8 dentro del zip", "regla": "El zip guardó la ruta en cp437 (p. ej. \"Tesorer+\ufffda\"); se corrigió al extraer", "acc": "Extraer forzando UTF-8"}, {"cod": "F13", "cat": "Archivo", "sev": "ALERTA", "nom": "Cabecera o tipo de cambio modificados", "regla": "El área cambió celdas fuera de Tabla1 en filas 1–8 (leyenda, TC)", "acc": "Ignorar: el TC se toma de tabla maestra"}, {"cod": "F14", "cat": "Archivo", "sev": "ALERTA", "nom": "Plantilla no reconocida", "regla": "La ruta/nombre no coincide con ninguna plantilla del maestro de plantillas", "acc": "Asignarla a mano en alias_ppto27.xlsx (alias_plantilla)"}, {"cod": "F15", "cat": "Archivo", "sev": "INFO", "nom": "Versión reemplazada", "regla": "Llegó una versión más nueva de la misma plantilla", "acc": "Se usa la última; la anterior queda en el historial"}, {"cod": "F16", "cat": "Archivo", "sev": "BLOQUEANTE", "nom": "Archivo ilegible", "regla": "No se pudo abrir (dañado, con clave o no es un .xlsx real)", "acc": "Pedir el archivo de nuevo"}, {"cod": "F17", "cat": "Archivo", "sev": "ALERTA", "nom": "Dos versiones en la misma subida", "regla": "En una misma carga llegaron dos archivos distintos de la misma plantilla", "acc": "Se usa el de fecha de modificación más reciente; confirmar con el área"}, {"cod": "L01", "cat": "Línea", "sev": "ERROR", "nom": "País vacío o fuera de lista", "regla": "Columna A no está en la lista País", "acc": "Cuarentena"}, {"cod": "L02", "cat": "Línea", "sev": "ERROR", "nom": "Vehículo inválido para el país", "regla": "Columna B no está en la lista del país", "acc": "Cuarentena"}, {"cod": "L03", "cat": "Línea", "sev": "ERROR", "nom": "CeCo vacío, sin número o \"Varios\"", "regla": "Columna C debe ser \"NNN - Nombre\"", "acc": "Cuarentena"}, {"cod": "L04", "cat": "Línea", "sev": "ALERTA", "nom": "CeCo fuera de la lista del archivo", "regla": "El CeCo no está en Ceco_Nombre (hoja Tablas)", "acc": "Validar contra maestro de CeCos"}, {"cod": "L05", "cat": "Línea", "sev": "ERROR", "nom": "Nivel 1 vacío o fuera de lista", "regla": "Columna F no está en Nivel_1", "acc": "Cuarentena"}, {"cod": "L06", "cat": "Línea", "sev": "ERROR", "nom": "Nivel 2 no corresponde al Nivel 1", "regla": "Columna G no está en la lista del Nivel 1", "acc": "Cuarentena"}, {"cod": "L07", "cat": "Línea", "sev": "ALERTA", "nom": "Proveedor de relleno", "regla": "Proveedor tipo \"NO ESTA\", \"POR DEFINIR\", \"XXX\", \"?\"", "acc": "Revisar con el área"}, {"cod": "L08", "cat": "Línea", "sev": "INFO", "nom": "Proveedor nuevo (fuera de la lista)", "regla": "Proveedor no está en la lista Proveedor del archivo", "acc": "Homologar proveedor"}, {"cod": "L09", "cat": "Línea", "sev": "ERROR", "nom": "Moneda vacía o fuera de lista", "regla": "Columna M no es PEN/COP/CLP/USD/MXN", "acc": "Cuarentena"}, {"cod": "L10", "cat": "Línea", "sev": "ALERTA", "nom": "Moneda no habitual para el país", "regla": "Moneda distinta a la local o USD", "acc": "Revisar conversión"}, {"cod": "L11", "cat": "Línea", "sev": "ALERTA", "nom": "Glosa vacía", "regla": "Línea sin Glosa / Texto", "acc": "Revisar con el área"}, {"cod": "L12", "cat": "Línea", "sev": "INFO", "nom": "Línea vacía", "regla": "Fila de la tabla sin textos ni montos", "acc": "Ignorar"}, {"cod": "L13", "cat": "Línea", "sev": "ALERTA", "nom": "Línea duplicada", "regla": "Mismos textos A..M que otra línea del archivo", "acc": "Revisar doble conteo"}, {"cod": "L14", "cat": "Línea", "sev": "ALERTA", "nom": "CeCo de otra agrupación", "regla": "El CeCo pertenece a una agrupación distinta a la de la plantilla (p. ej. 502 MDK en Staff - Finanzas USA)", "acc": "Se clasifica por su CeCo; devolver al área para corregir"}, {"cod": "L15", "cat": "Línea", "sev": "INFO", "nom": "Cuenta contable homologada", "regla": "La cuenta estaba escrita distinto (tildes, mayúsculas, espacios) o figura en alias aprobados", "acc": "Se reemplaza por el nombre oficial"}, {"cod": "L16", "cat": "Línea", "sev": "ALERTA", "nom": "Cuenta contable sugerida por parecido", "regla": "No coincide con el plan de cuentas; hay una cuenta muy parecida", "acc": "Confirmar y agregar a alias_ppto27.xlsx (alias_cuenta)"}, {"cod": "L17", "cat": "Línea", "sev": "ALERTA", "nom": "Cuenta contable no reconocida", "regla": "No está en el plan de cuentas ni en alias", "acc": "Revisar con el área; se reporta por su Nivel 1 / Nivel 2"}, {"cod": "L18", "cat": "Línea", "sev": "ERROR", "nom": "Proveedor \"Varios\"", "regla": "Prohibido usar Varios como proveedor", "acc": "Cuarentena; pedir el proveedor real"}, {"cod": "L19", "cat": "Línea", "sev": "ALERTA", "nom": "Proveedor sugerido por parecido", "regla": "No coincide con el maestro; hay un proveedor muy parecido", "acc": "Confirmar y agregar a alias_ppto27.xlsx (alias_proveedor)"}, {"cod": "M01", "cat": "Montos", "sev": "ERROR", "nom": "Ppto 2027 en positivo", "regla": "En las columnas Ppto 2027 todo monto debe ser negativo", "acc": "Cuarentena (o invertir signo con aprobación)"}, {"cod": "M02", "cat": "Montos", "sev": "INFO", "nom": "Celda de monto con espacio / espacio duro", "regla": "Texto vacío (\" \" o \"\\xa0\") en lugar de celda vacía", "acc": "Tratar como vacío"}, {"cod": "M03", "cat": "Montos", "sev": "ALERTA", "nom": "Número guardado como texto", "regla": "\"1,500\", \"S/ 200\", \"(300)\", \"1.500,00\"", "acc": "Convertir y registrar"}, {"cod": "M04", "cat": "Montos", "sev": "INFO", "nom": "Fórmula aritmética simple", "regla": "=-2000000/12", "acc": "Evaluar"}, {"cod": "M05", "cat": "Montos", "sev": "ERROR", "nom": "Fórmula con error o sin valor", "regla": "#REF!, #VALUE!, #DIV/0! o fórmula que no se puede calcular", "acc": "Cuarentena"}, {"cod": "M06", "cat": "Montos", "sev": "ERROR", "nom": "Fecha en celda de monto", "regla": "Excel convirtió \"1-5\" en fecha", "acc": "Cuarentena"}, {"cod": "M07", "cat": "Montos", "sev": "ERROR", "nom": "Fórmula con vínculo a otro libro", "regla": "=[Libro2.xlsx]Hoja1!A1", "acc": "Cuarentena"}, {"cod": "M08", "cat": "Montos", "sev": "ALERTA", "nom": "Fórmula con referencias a celdas", "regla": "=N4*1364: depende de otras celdas", "acc": "Usar valor calculado y registrar"}, {"cod": "M09", "cat": "Montos", "sev": "ERROR", "nom": "Texto no numérico en monto", "regla": "\"pendiente\", \"n/a\", \"ver correo\"", "acc": "Cuarentena"}, {"cod": "M10", "cat": "Montos", "sev": "INFO", "nom": "Real 2026 positivo", "regla": "Extornos / reversiones del contable", "acc": "Permitido en Real; no se presupuesta"}, {"cod": "M11", "cat": "Montos", "sev": "INFO", "nom": "Cero escrito", "regla": "Se escribió 0 en vez de dejar vacío", "acc": "Tratar como vacío"}, {"cod": "M12", "cat": "Montos", "sev": "INFO", "nom": "Ppto 2027 con más de 2 decimales", "regla": "Montos con decimales largos", "acc": "Redondear a 2"}, {"cod": "M13", "cat": "Montos", "sev": "ALERTA", "nom": "Ppto anual cargado en un solo mes", "regla": "Línea recurrente en 2026 con todo 2027 en un mes", "acc": "Revisar mensualización"}, {"cod": "M14", "cat": "Montos", "sev": "ALERTA", "nom": "Variación > ±50 % sin comentario", "regla": "P27 vs Real anualizado fuera de rango y Comentario de Área vacío", "acc": "Pedir sustento"}, {"cod": "M15", "cat": "Montos", "sev": "ALERTA", "nom": "Posible error de escala o moneda", "regla": "P27 ≈ ×1000 / ÷1000 del Real anualizado, o ≈ × tipo de cambio", "acc": "Revisar unidades y moneda"}, {"cod": "M16", "cat": "Montos", "sev": "ALERTA", "nom": "Columna calculada pisada", "regla": "F26 / P27 / Var. escritos como valor en vez de fórmula", "acc": "Recalcular en Databricks"}, {"cod": "M17", "cat": "Montos", "sev": "INFO", "nom": "Forecast Set–Dic 26 ingresado", "regla": "El área llenó Set–Dic 26", "acc": "Cargar como F26 del área"}, {"cod": "T01", "cat": "Texto", "sev": "ALERTA", "nom": "Caracteres dañados (no UTF-8)", "regla": "Ã©, Ã±, \ufffd, ╠, \"+\ufffd\": tildes mal codificadas", "acc": "Reparar codificación"}, {"cod": "T02", "cat": "Texto", "sev": "INFO", "nom": "Espacios extra, espacio duro o saltos de línea", "regla": "Textos con espacios al inicio/fin, dobles o \\xa0", "acc": "Limpiar (trim)"}, {"cod": "T03", "cat": "Texto", "sev": "ALERTA", "nom": "Caracteres invisibles o de control", "regla": "Zero-width, BOM, \\x00…", "acc": "Eliminar"}, {"cod": "T04", "cat": "Texto", "sev": "INFO", "nom": "Texto de más de 255 caracteres", "regla": "Glosa o comentario muy largo", "acc": "Truncar en reportes"}, {"cod": "T05", "cat": "Texto", "sev": "INFO", "nom": "Separadores que rompen CSV", "regla": "Textos con ; | o tabulación", "acc": "Escapar al exportar"}, {"cod": "T06", "cat": "Texto", "sev": "INFO", "nom": "Tildes o mayúsculas distintas al catálogo", "regla": "\"Peru\" en vez de \"Perú\"", "acc": "Normalizar"}];
+var SEV={BLOQUEANTE:['s-bloq','Bloqueante','Rechaza el archivo completo; el área debe volver a enviarlo'],ERROR:['s-err','Error','La línea va a cuarentena y no se consolida hasta que se corrija'],ALERTA:['s-ale','Alerta','Entra a la carga, pero se revisa con el área'],INFO:['s-inf','Info','Se corrige sola o solo informa; no bloquea nada']};
+var FAM=[['Todas',''],['Archivo','Archivo'],['Línea','Línea'],['Cambios','Cambio vs enviado'],['Montos','Montos'],['Texto','Texto']];
+var SEVO=[['Todas',''],['Bloqueante','BLOQUEANTE'],['Error','ERROR'],['Alerta','ALERTA'],['Info','INFO']];
+var fF='',fS='',fQ='';
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+document.getElementById('sevs').innerHTML=Object.keys(SEV).map(function(k){var n=FLG.filter(function(f){return f.sev===k}).length;return '<div class="sev '+SEV[k][0]+'"><div class="t">'+SEV[k][1]+'</div><div class="n">'+n+'</div><p>'+SEV[k][2]+'</p></div>'}).join('');
+function seg(id,ops,set){var el=document.getElementById(id);el.innerHTML=ops.map(function(o,i){return '<button type="button" data-v="'+o[1]+'" aria-pressed="'+(i===0)+'">'+o[0]+'</button>'}).join('');
+  el.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;[].forEach.call(el.children,function(x){x.setAttribute('aria-pressed',x===b)});set(b.getAttribute('data-v'));pinta()})}
+seg('flg-fam',FAM,function(v){fF=v});seg('flg-sev',SEVO,function(v){fS=v});
+document.getElementById('flg-q').addEventListener('input',function(e){fQ=e.target.value.toLowerCase().trim();pinta()});
+var ORD={BLOQUEANTE:0,ERROR:1,ALERTA:2,INFO:3};
+function pinta(){var r=FLG.filter(function(f){return(!fF||f.cat===fF)&&(!fS||f.sev===fS)&&(!fQ||(f.cod+' '+f.nom+' '+f.regla+' '+f.acc+' '+f.cat).toLowerCase().indexOf(fQ)>=0)})
+  .sort(function(a,b){return ORD[a.sev]-ORD[b.sev]||a.cod.localeCompare(b.cod)});
+  document.getElementById('flg').innerHTML=r.length?r.map(function(f){var s=SEV[f.sev];return '<article class="flg '+s[0]+'"><div class="top"><span class="cod">'+f.cod+'</span><span class="pill">'+s[1]+'</span></div><div class="fam">'+esc(f.cat)+'</div><h4>'+esc(f.nom)+'</h4><p class="regla">'+esc(f.regla)+'</p><p class="acc">'+esc(f.acc)+'</p></article>'}).join(''):'<div class="flg-vacio">Ninguna regla coincide con el filtro.</div>';
+  document.getElementById('flg-n').textContent='Mostrando '+r.length+' de '+FLG.length+' reglas.'}
+pinta();
+
+/* ---------- índice activo y tema ---------- */
+var links=[].slice.call(document.querySelectorAll('#toc a'));
+var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+function act(){var y=window.scrollY+120,k=0;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)k=i});links.forEach(function(a,i){a.classList.toggle('on',i===k)})}
+window.addEventListener('scroll',act,{passive:true});act();
+var root=document.documentElement;
+try{var t=localStorage.getItem('ppto27-tema');if(t)root.setAttribute('data-theme',t)}catch(e){}
+document.getElementById('tema').addEventListener('click',function(){
+  var dark=root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  var n=dark?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('ppto27-tema',n)}catch(e){}
+});
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+pandas>=2.0
+numpy>=1.24
+openpyxl>=3.1
+lxml>=4.9
+# Pipeline y pruebas locales en Spark (opcional)
+pyspark==3.5.*
+delta-spark==3.2.*

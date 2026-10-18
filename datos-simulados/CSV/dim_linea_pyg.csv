@@ -1,0 +1,37 @@
+﻿id_linea_pyg,n1_formato,grupo_n2,n2_formato,nivel_1_plantilla,nivel_2_plantilla,orden_n1,orden_n2
+1,Gastos del Personal,,Remuneración Fija,Gastos del Personal,Remuneración Fija,1,1
+2,Gastos del Personal,,Remuneración Variable,Gastos del Personal,Remuneración Variable,1,2
+3,Gastos del Personal,Otros gastos de personal,OGP - Bienestar/Eventos,Gastos del Personal,OGP - Bienestar/eventos,1,3
+4,Gastos del Personal,Otros gastos de personal,OGP - Cultura y Com. Interna,Gastos del Personal,OGP - Cultura y Com. Interna,1,4
+5,Gastos del Personal,Otros gastos de personal,OGP - Consultoría,Gastos del Personal,OGP - Consultoría,1,5
+6,Gastos del Personal,Otros gastos de personal,OGP - Seguros y Salud,Gastos del Personal,OGP - Seguros y Salud,1,6
+7,Gastos del Personal,Otros gastos de personal,OGP - Servicios Compensaciones,Gastos del Personal,OGP - Servicios Compensaciones,1,7
+8,Gastos del Personal,Otros gastos de personal,OGP - Otros Gastos Personal,Gastos del Personal,OGP - Otros Gastos Personal,1,8
+9,Gastos del Personal,Otros gastos de personal,OGP - Selección & On boarding,Gastos del Personal,OGP - Selección & On Boarding,1,9
+10,Gastos del Personal,Otros gastos de personal,OGP - Talento,Gastos del Personal,OGP - Talento,1,10
+11,Gastos del Personal,,Capacitaciones,Gastos del Personal,Capacitaciones,1,11
+12,Gastos del Personal,,Incentivo Corto Plazo,Gastos del Personal,Incentivo Corto Plazo,1,12
+13,Gastos del Personal,,Incentivo Largo Plazo,Gastos del Personal,Incentivo Largo Plazo,1,13
+14,Gastos Administrativos,,Misiones,Gastos Administrativos,Misiones,2,14
+15,Gastos Administrativos,C & CS,Consultorías y honorarios,Gastos Administrativos,Consultorías y Honorarios,2,15
+16,Gastos Administrativos,C & CS,CS Administrativo,Gastos Administrativos,CS Administrativo,2,16
+17,Gastos Administrativos,,Marketing,Gastos Administrativos,Marketing,2,17
+18,Gastos Administrativos,,Gastos de Representación,Gastos Administrativos,Gastos de Representación,2,18
+19,Gastos Administrativos,,Suscripciones y servicios de información,Gastos Administrativos,Suscripciones y Servicios de Información,2,19
+20,Gastos Administrativos,,"Pagos transaccionales, bolsas y otros",Gastos Administrativos,"Pagos Transaccionales, Bolsas y Otros",2,20
+21,Gastos Administrativos,,Transporte y Mensajería,Gastos Administrativos,Transporte y Mensajería,2,21
+22,Gastos Administrativos,,Oficinas y Suministros,Gastos Administrativos,Oficinas y Suministros,2,22
+23,Gastos Administrativos,Otros Gastos,Provisión de Incobrables,Gastos Administrativos,Provisión de Incobrables,2,23
+24,Gastos Administrativos,Otros Gastos,Donaciones,Gastos Administrativos,Donaciones,2,24
+25,Gastos de TI,,Licencias,Tecnología y Comunicaciones,Licencias,3,25
+26,Gastos de TI,,Aplicaciones,Tecnología y Comunicaciones,Aplicaciones,3,26
+27,Gastos de TI,,Infraestructura,Tecnología y Comunicaciones,Infraestructura,3,27
+28,Gastos de TI,,Comunicaciones,Tecnología y Comunicaciones,Comunicaciones,3,28
+29,Gastos de TI,,Cloud,Tecnología y Comunicaciones,Cloud,3,29
+30,Gastos de TI,,Consultorías,Tecnología y Comunicaciones,Consultorías,3,30
+31,Gastos de TI,,Equipos de Usuario e Impresoras,Tecnología y Comunicaciones,Equipos de Usuario e Impresoras,3,31
+32,Gastos de TI,,Servicio de HelpDesk,Tecnología y Comunicaciones,Servicio de HelpDesk,3,32
+33,Otros Gastos,,Depreciación y Amortización,Depreciación y Amortización,Depreciación y Amortización,4,33
+34,Otros Gastos,,Impuestos y Contribuciones,Impuestos y Contribuciones,Impuestos y Contribuciones,4,34
+35,Otros Gastos,,Otros gastos,Otros Gastos,Otros Gastos,4,35
+0,Sin mapeo,,Sin mapeo,,,99,999
